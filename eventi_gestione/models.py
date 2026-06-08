@@ -14,6 +14,7 @@ class Eventi(models.Model):
     tipo_evento = models.ForeignKey(Tipologia,on_delete=models.CASCADE)
     luogo_evento = models.CharField(max_length=100)
     data_ora_evento = models.DateTimeField()
+    immagine_evento = models.ImageField(upload_to='eventi/', blank=True, null=True)
 
     def __str__(self):
        # return self.nome_evento
