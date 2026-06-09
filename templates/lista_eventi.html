@@ -1,4 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-<p>Lista eventi</p>
+    <p>Lista eventi</p>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for evento in eventi_futuri %}
+            <div class="col">
+                <div class="card h-100">
+                        {% if evento.immagine_evento %}
+                            <img src="{{ evento.immagine_evento.url }}" class="card-img-top" alt="">
+                        {% endif %}
+                        <div class="card-body">
+                            <h3 class="card-title" class="h5"><a href="{% url 'evento' evento.id %}">{{ evento.nome_evento }}</a></h3>
+                            <p class="card-text">
+                                {{ evento.tipo_evento}}<br>
+                                {{ evento.data_ora_evento }}<br>
+                            </p>
+                        </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock content %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    <p>Scheda singolo eventi</p>
+    <h1>{{ evento.nome_evento }}</h1>
+    <p>Data: {{ evento.data_ora_evento }}</p>
+    <p>Luogo: {{ evento.luogo_evento}}</p>
+    <p>Tipologia: {{ evento.tipo_evento}}</p>
+    <p>Descrizione: {{ evento.descrizione_evento }}</p>
+    {% if evento.immagine_evento %}
+        <img src="{{ evento.immagine_evento.url }}">
+    {% endif %}
+{% endblock content %}
