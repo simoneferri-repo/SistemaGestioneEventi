@@ -22,7 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("pagine.urls")),
-    path("eventi", include("pagine.urls")),
+    #path("eventi", include("pagine.urls")),
+    path("", include("eventi_gestione.urls")),
 ]
 
 if settings.DEBUG:

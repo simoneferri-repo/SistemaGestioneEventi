@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h2>{{ titolo_pagina }}</h2>
+
+    {% crispy form %}
+    
+    {% if form.instance.immagine_evento %}
+    <div class="mt-3">
+        <p>Immagine attuale:</p>
+        <img src="{{ form.instance.immagine_evento.url }}"
+             alt="Immagine evento"
+             style="max-width: 300px; border-radius: 8px;">
+    </div>
+{% endif %}
+{% endblock content %}
