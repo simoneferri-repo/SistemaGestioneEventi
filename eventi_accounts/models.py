@@ -3,5 +3,6 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
-    eta = models.PositiveIntegerField(null=False, blank=False)s
+    eta = models.PositiveIntegerField(null=False, blank=False)
+    telefono = models.PositiveIntegerField(null=False, blank=False)
 

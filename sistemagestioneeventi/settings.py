@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'eventi_gestione',
+    'eventi_accounts',
     "crispy_forms",
     "crispy_bootstrap5",
 ]
@@ -126,3 +127,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+AUTH_USER_MODEL = 'eventi_accounts.CustomUser'
