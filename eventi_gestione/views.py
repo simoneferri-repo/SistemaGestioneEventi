@@ -1,15 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
 from .models import Eventi
 from .forms import GestioneEventiForm
 
-class EventiCreateView(CreateView):
+class EventiCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Eventi
     form_class = GestioneEventiForm
     template_name = 'gestione_eventi.html'
     success_url = reverse_lazy('eventi')
+
+    def test_func(self):
+        # Controlla se l'utente appartiene al gruppo 'editor'
+        return self.request.user.groups.filter(name='redattori').exists()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

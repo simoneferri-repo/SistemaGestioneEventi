@@ -15,6 +15,7 @@ class Eventi(models.Model):
     luogo_evento = models.CharField(max_length=100)
     data_ora_evento = models.DateTimeField()
     immagine_evento = models.ImageField(upload_to='eventi/', blank=True, null=True)
+    posti_prenotabili = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
        # return self.nome_evento

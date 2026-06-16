@@ -9,4 +9,5 @@
     {% if evento.immagine_evento %}
         <img src="{{ evento.immagine_evento.url }}">
     {% endif %}
+    <p>Posti disponibili: {{ evento.posti_prenotabili}}</p>
 {% endblock content %}
