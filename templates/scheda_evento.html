@@ -10,4 +10,23 @@
         <img src="{{ evento.immagine_evento.url }}">
     {% endif %}
     <p>Posti disponibili: {{ evento.posti_prenotabili}}</p>
+    <p>
+    Posti {{ evento.posti_prenotabili }}
+    {% if user.is_authenticated %}
+        {% if evento.posti_prenotabili > 0 %}
+            <form method="post" action="{% url 'prenota_evento' evento.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-lg">
+                    Prenota
+                </button>
+            </form>
+        {% else %}
+            <button class="btn btn-secondary btn-lg" disabled>Posti Esauriti</button>
+        {% endif %}
+    {% else %}
+    <div class="alert alert-warning d-inline-block">
+            <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
+        </div>
+    {% endif %}
+    </p>
 {% endblock content %}

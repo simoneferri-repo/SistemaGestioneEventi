@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path("", include("eventi_gestione.urls")),
     path("", include("eventi_accounts.urls")),
+    path("", include("eventi_prenotazione.urls")),
 ]
 
 if settings.DEBUG:
