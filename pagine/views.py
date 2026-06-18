@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from eventi_gestione.models import Eventi
+from eventi_prenotazione.models import Prenotazione
 from django.utils import timezone
 
 
@@ -29,3 +30,17 @@ class EventDetailView(DetailView):
     model = Eventi
     template_name = "scheda_evento.html"
     context_object_name = 'evento'
+
+    def get_context_data(self, **kwargs):
+        global prenotazione_on
+        context = super().get_context_data(**kwargs)
+
+        prenotazione_attiva = False
+        if self.request.user.is_authenticated:
+            prenotazione_on = Prenotazione.objects.filter(
+                utente=self.request.user,
+                evento=self.get_object()
+            ).exists()
+        context['prenotazione_attiva'] = prenotazione_on
+
+        return context
