@@ -20,7 +20,7 @@ class PrenotazioneView(LoginRequiredMixin, View):
         else:
             messages.error(request, "Posti esauriti.")
 
-        return HttpResponseRedirect(reverse('eventi', kwargs={'evento_id': evento.id}))
+        return HttpResponseRedirect(reverse('evento', kwargs={'pk': evento.id}))
 
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(reverse('eventi'))
