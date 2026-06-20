@@ -42,6 +42,30 @@ class PrenotazioneView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(reverse('eventi'))
 
+class CancellazioneView(LoginRequiredMixin, View):
 
+    def post(self, request, evento_id):
+        evento = get_object_or_404(Eventi, id=evento_id)
+        prenotazione_attiva_server = Prenotazione.objects.filter(utente=request.user, evento=evento).exists()
+
+        if prenotazione_attiva_server:
+            try:
+                elimina_prenotazione = Prenotazione.objects.filter(
+                    utente=request.user,
+                    evento=evento
+                ).delete()
+                evento.posti_prenotabili += 1
+                evento.save()
+                messages.success(request, "La prenotazione è stata correttamente cancellata!")
+            except IntegrityError as e:
+                print(f"Errore nel salvataggio sul Database: {e}")
+                messages.error(request, "Errore durante il salvataggio della prenotazione.")
+            except Exception as e:
+                print(f"Errore generico: {e}")
+                messages.error(request, f"Errore generico: {e}")
+        else:
+            messages.error(request, "Non ci sono prenotazioni da cancellare.")
+
+        return HttpResponseRedirect(reverse('evento', kwargs={'pk': evento.id}))
 
 # Create your views here.

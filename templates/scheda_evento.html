@@ -21,7 +21,7 @@
         <img src="{{ evento.immagine_evento.url }}">
     {% endif %}
 
-    <p> {{ prenotazione_attiva }}
+    <p>
     {% if user.is_authenticated and not prenotazione_attiva %}
         {% if evento.posti_prenotabili > 0 %}
             <p>Posti disponibili: {{ evento.posti_prenotabili}}</p>
@@ -38,6 +38,13 @@
         <div class="alert alert-warning d-inline-block">
             <p>Evento già prenotato</p>
         </div>
+        <form method="post" action="{% url 'cancella_evento' evento.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-lg">
+                Cancella prenotazione
+            </button>
+        </form>
+
     {% else %}
          <div class="alert alert-warning d-inline-block">
             <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
