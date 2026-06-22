@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from eventi_gestione.models import Eventi
+from django.contrib.auth.mixins import LoginRequiredMixin
 from eventi_prenotazione.models import Prenotazione
 from django.utils import timezone
 
@@ -25,6 +26,13 @@ class EventListView(ListView):
         context['eventi_futuri'] = Eventi.objects.filter(data_ora_evento__gte=ora_attuale).order_by('data_ora_evento')
 
         return context
+class UserEventListView(LoginRequiredMixin,ListView):
+    model = Prenotazione
+    template_name = "prenotazioni_utente.html"
+    context_object_name = 'prenotazioni_utente'
+
+    def get_queryset(self):
+        return Prenotazione.objects.filter(utente=self.request.user).select_related('evento').order_by('-data_prenotazione')
 
 class EventDetailView(DetailView):
     model = Eventi
@@ -32,10 +40,9 @@ class EventDetailView(DetailView):
     context_object_name = 'evento'
 
     def get_context_data(self, **kwargs):
-        global prenotazione_on
+        #global prenotazione_on
         context = super().get_context_data(**kwargs)
 
-        prenotazione_attiva = False
         if self.request.user.is_authenticated:
             prenotazione_on = Prenotazione.objects.filter(
                 utente=self.request.user,

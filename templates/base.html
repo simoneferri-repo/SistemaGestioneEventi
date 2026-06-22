@@ -26,6 +26,11 @@
             <li class="nav-item">
               <a class="nav-link" href="/eventi">Eventi</a>
             </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/eventi_prenotati/">Eventi prenotati</a>
+                </li>
+            {% endif %}
           </ul>
           <span class="navbar-text">
             {% if user.is_authenticated %}
