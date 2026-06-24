@@ -34,6 +34,9 @@
           </ul>
           <span class="navbar-text">
             {% if user.is_authenticated %}
+                <span class="navbar-text me-3">
+                    Utente loggato: <strong>{{ user.username }}</strong>
+                </span>
                 <form method="post" action="{% url 'logout' %}" class="d-inline">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-danger btn-sm">

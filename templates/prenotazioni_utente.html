@@ -1,27 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-    <p>Lista eventi prenotati</p>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-    {% if prenotazioni_utente %}
+    <h2>Lista eventi prenotati</h2>
 
-        {% for prenotato in prenotazioni_utente %}
-            <div class="col">
-                <div class="card h-100">
-                        {% if prenotato.evento.immagine_evento %}
-                            <img src="{{ prenotato.evento.immagine_evento.url }}" class="card-img-top" alt="">
-                        {% endif %}
-                        <div class="card-body">
-                            <h3 class="card-title" class="h5"><a href="{% url 'evento' prenotato.evento.id %}">{{ prenotato.evento.nome_evento }}</a></h3>
-                            <p class="card-text">
-                                {{ prenotato.evento.tipo_evento}}<br>
-                                {{ prenotato.evento.data_ora_evento }}<br>
-                            </p>
-                        </div>
+    {% if prenotazioni_utente %}
+        <p>Ci sono {{ prenotazioni_utente.count }} prenotazioni attive.</p>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for prenotato in prenotazioni_utente %}
+                <div class="col">
+                    <div class="card h-100">
+                            {% if prenotato.evento.immagine_evento %}
+                                <img src="{{ prenotato.evento.immagine_evento.url }}" class="card-img-top" alt="">
+                            {% endif %}
+                            <div class="card-body">
+                                <h3 class="card-title" class="h5"><a href="{% url 'evento' prenotato.evento.id %}">{{ prenotato.evento.nome_evento }}</a></h3>
+                                <p class="card-text">
+                                    {{ prenotato.evento.tipo_evento}}<br>
+                                    {{ prenotato.evento.data_ora_evento }}<br>
+                                </p>
+                            </div>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     {% else %}
         <p class="alert alert-warning" role="alert">Nessun evento prenotato</p>
     {% endif %}
-    </div>
+
 {% endblock content %}
