@@ -20,11 +20,24 @@ class EventiCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['titolo_pagina'] = 'Nuovo Evento'
         return context
-class EventiUpdateView(UpdateView):
+    # Faccio l'override del metodo form_valid per aggiungere in automatico l'utente creatore
+    def form_valid(self, form):
+
+        form.instance.creatore = self.request.user
+        return super().form_valid(form)
+
+class EventiUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Eventi
     form_class = GestioneEventiForm
     template_name = 'gestione_eventi.html'
     success_url = reverse_lazy('eventi')
+
+    def test_func(self):
+        evento = self.get_object()
+
+        # Controlla se l'utente è l'utente creatore
+        return self.request.user == evento.creatore
+        # return self.request.user.groups.filter(name='redattori').exists()
 
     def form_valid(self, form):
         if not self.request.FILES.get('immagine_evento'):

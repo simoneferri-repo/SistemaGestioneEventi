@@ -1,4 +1,5 @@
 from django.db import models
+from eventi_accounts.models import CustomUser
 
 # Create your models here.
 
@@ -16,6 +17,7 @@ class Eventi(models.Model):
     data_ora_evento = models.DateTimeField()
     immagine_evento = models.ImageField(upload_to='eventi/', blank=True, null=True)
     posti_prenotabili = models.PositiveIntegerField(null=True, blank=True)
+    creatore = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='eventi_creati')
 
     def __str__(self):
        # return self.nome_evento

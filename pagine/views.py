@@ -32,7 +32,7 @@ class UserEventListView(LoginRequiredMixin,ListView):
     context_object_name = 'prenotazioni_utente'
 
     def get_queryset(self):
-        return Prenotazione.objects.filter(utente=self.request.user).select_related('evento').order_by('-data_prenotazione')
+        return Prenotazione.objects.filter(utente=self.request.user).select_related('evento').order_by('evento__data_ora_evento')
 
 class EventDetailView(DetailView):
     model = Eventi
@@ -42,7 +42,7 @@ class EventDetailView(DetailView):
     def get_context_data(self, **kwargs):
         #global prenotazione_on
         context = super().get_context_data(**kwargs)
-
+        prenotazione_on = False
         if self.request.user.is_authenticated:
             prenotazione_on = Prenotazione.objects.filter(
                 utente=self.request.user,
