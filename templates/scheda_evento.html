@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load auth_extras %}
 {% block content %}
     {% if messages %}
         <div class="messages-container mt-3">
@@ -22,7 +23,7 @@
     {% endif %}
 
     <p>
-    {% if user.is_authenticated and not prenotazione_attiva %}
+    {% if user.is_authenticated and not prenotazione_attiva and not user|has_group:"redattori" %}
         {% if evento.posti_prenotabili > 0 %}
             <p>Posti disponibili: {{ evento.posti_prenotabili}}</p>
             <form method="post" action="{% url 'prenota_evento' evento.id %}">
@@ -45,7 +46,7 @@
             </button>
         </form>
 
-    {% else %}
+    {% elif not user|has_group:"redattori" %}
          <div class="alert alert-warning d-inline-block">
             <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
         </div>

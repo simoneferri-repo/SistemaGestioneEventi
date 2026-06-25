@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'eventi_gestione',
     'eventi_accounts',
     'eventi_prenotazione',
+    'eventi_pagine',
     "crispy_forms",
     "crispy_bootstrap5",
 ]
