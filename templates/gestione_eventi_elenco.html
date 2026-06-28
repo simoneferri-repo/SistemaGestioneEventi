@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Lista eventi inseriti</h2>
+
+    {% if gestione_eventi_elenco %}
+        <p>Hai inserito {{ gestione_eventi_elenco.count }} eventi.</p>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for evento_inserito in gestione_eventi_elenco %}
+                <div class="col">
+                    <div class="card h-100">
+                            {% if evento_inserito.immagine_evento %}
+                                <img src="{{ evento_inserito.immagine_evento.url }}" class="card-img-top" alt="">
+                            {% endif %}
+                            <div class="card-body">
+                                <h3 class="card-title" class="h5"><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a></h3>
+                                <p class="card-text">
+                                    {{ evento_inserito.tipo_evento}}<br>
+                                    {{ evento_inserito.data_ora_evento }}<br>
+                                </p>
+                            </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="alert alert-warning" role="alert">Nessun evento inserito</p>
+    {% endif %}
+
+{% endblock content %}

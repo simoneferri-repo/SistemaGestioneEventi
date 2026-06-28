@@ -54,3 +54,11 @@ class EventDetailView(DetailView):
         context['is_creatore'] = self.request.user == evento.creatore
 
         return context
+
+class EditorEventListView(LoginRequiredMixin, ListView):
+    model = Eventi
+    template_name = 'gestione_eventi_elenco.html'
+    context_object_name = 'gestione_eventi_elenco'
+
+    def get_queryset(self):
+        return Eventi.objects.filter(creatore=self.request.user)
