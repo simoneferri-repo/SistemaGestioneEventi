@@ -50,4 +50,7 @@ class EventDetailView(DetailView):
             ).exists()
         context['prenotazione_attiva'] = prenotazione_on
 
+        evento = self.object
+        context['is_creatore'] = self.request.user == evento.creatore
+
         return context
