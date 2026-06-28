@@ -29,26 +29,34 @@
             <form method="post" action="{% url 'prenota_evento' evento.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-success btn-lg">
-                    Prenota
+                    <i class="bi bi-calendar-plus"></i> Prenota
                 </button>
             </form>
         {% else %}
-            <button class="btn btn-secondary btn-lg" disabled>Posti Esauriti</button>
+            <p class="alert alert-warning d-inline-block"><i class="bi bi-calendar-x"></i> Posti Esauriti</p>
         {% endif %}
     {% elif prenotazione_attiva %}
-        <div class="alert alert-warning d-inline-block">
-            <p>Evento già prenotato</p>
+        <div class="alert alert-light d-inline-block">
+            <p class="m-1"><i class="bi bi-calendar-check"></i> Evento già prenotato</p>
         </div>
-        <form method="post" action="{% url 'cancella_evento' evento.id %}">
+        <form method="post" action="{% url 'cancella_evento' evento.id %}" class="d-inline-block">
             {% csrf_token %}
-            <button type="submit" class="btn btn-success btn-lg">
-                Cancella prenotazione
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-trash"></i> Cancella prenotazione
             </button>
         </form>
 
-    {% elif not user|has_group:"redattori" %}
+    {% elif is_creatore %}
+         <div class="alert alert-primary d-inline-block">
+            <i class="bi bi-pencil-square"></i> <a href="{% url 'gestione_eventi_modifica' evento.id %}" class="alert-link">Modifica l'evento</a>
+        </div>
+
+        <div class="alert alert-warning d-inline-block">
+            <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
+        </div>
+    {% else %}
          <div class="alert alert-warning d-inline-block">
-            <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
+            <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
         </div>
     {% endif %}
     </p>
