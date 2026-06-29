@@ -3,8 +3,8 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
-from .models import Eventi
-from .forms import GestioneEventiForm
+from .models import Eventi, Tipologia
+from .forms import GestioneEventiForm, GestioneTipologiaForm
 
 class EventiCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Eventi
@@ -32,6 +32,11 @@ class EventiUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'gestione_eventi.html'
     success_url = reverse_lazy('eventi')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def test_func(self):
         evento = self.get_object()
 
@@ -48,3 +53,18 @@ class EventiUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['titolo_pagina'] = f'Modifica: {self.object.nome_evento}'
         return context
+
+class TipologiaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Tipologia
+    form_class = GestioneTipologiaForm
+    template_name = 'gestione_tipologia.html'
+    success_url = reverse_lazy('tipologie')
+
+    def test_func(self):
+        # Controlla se l'utente appartiene al gruppo 'editor'
+        return self.request.user.groups.filter(name='redattori').exists()
+
+    # Faccio l'override del metodo form_valid per aggiungere in automatico l'utente creatore
+    def form_valid(self, form):
+        form.instance.creatore = self.request.user
+        return super().form_valid(form)
