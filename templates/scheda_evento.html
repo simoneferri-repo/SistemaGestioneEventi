@@ -50,6 +50,9 @@
          <div class="alert alert-primary d-inline-block">
             <i class="bi bi-pencil-square"></i> <a href="{% url 'gestione_eventi_modifica' evento.id %}" class="alert-link">Modifica l'evento</a>
         </div>
+        <div class="alert alert-primary d-inline-block">
+            <i class="bi bi-pencil-square"></i> <a href="{% url 'gestione_eventi_elimina' evento.pk %}" class="alert-link">Elimina evento</a>
+        </div>
 
         <div class="alert alert-warning d-inline-block">
             <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.

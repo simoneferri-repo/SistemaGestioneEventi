@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card border-danger shadow">
+                    <div class="card-header bg-danger text-white">
+                        <h4 class="mb-0">Conferma Cancellazione</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="fs-5">
+                            Sei sicuro di voler eliminare definitivamente l'evento
+                            <strong>"{{ object.titolo }}"</strong>?
+                        </p>
+                        <p class="text-muted small">Questa azione è irreversibile.</p>
+
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Sì, Elimina</button>
+                            <a href="{% url 'eventi_inseriti' %}" class="btn btn-secondary">Annulla</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
