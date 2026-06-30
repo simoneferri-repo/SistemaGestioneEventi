@@ -59,12 +59,31 @@ class GestioneTipologiaForm(ModelForm):
         model = Tipologia
         fields = ['nome_tipo']
         #fields = '--__all__'
+        labels = {
+            'nome_tipo': 'Nome',
+        }
 
     def __init__(self, *args, **kwargs):
+        current_user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+
+        if self.instance and self.instance.pk and getattr(self.instance, 'creatore', None):
+            creatore_html = HTML(f'''
+                        <div class="mb-3">
+                            <div class="form-control-plaintext text-muted">Tipologia creata da: <strong>{self.instance.creatore.username}</strong></div>
+                        </div>
+                    ''')
+        else:
+            creatore_html = HTML('''
+                            <div class="alert alert-info py-2 mb-3">
+                                <i class="bi bi-info-circle"></i> La tipologia verrà registrato a tuo nome.
+                            </div>
+                        ''')
+
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.layout = Layout(
+            Column(creatore_html, css_class='col-md-4'),
             Field('nome_tipo', placeholder='Nome tipologia'),
             Submit('submit', 'Salva', css_class='btn btn-primary mt-2'),
         )

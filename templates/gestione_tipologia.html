@@ -2,6 +2,32 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <h2>{{ titolo_pagina }}</h2>
+    {% if request.resolver_match.url_name == 'gestione_tipologia_creazione' %}
+        <div class="mb-5">
+            <h3 class="mb-3">Tipologie già inserite</h3>
+
+            {% if tipologie_esistenti %}
+                <ul class="list-group">
+                    {% for tipo in tipologie_esistenti %}
+                        <li class="list-group-item d-flex align-middle">
+                            <p class="h4">
+                                {{ tipo.nome_tipo }}
+                                {% if tipo.creatore == user %}
+                                    <a href="{% url 'gestione_tipologia_modifica' tipo.id %}" class="btn btn-primary btn-sm" role="button"><i class="bi bi-pencil-square"></i> Modifica</a>
+                                {% else %}
+                                    <em class="h6 fw-normal"><small>( <i class="bi bi-person-circle " title="creatore" aria-label="creata da"></i> {{ tipo.creatore.username }} )</small></em>
+                                {% endif %}
+                            </p>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {% else %}
+                <p class="text-muted italic">Non è ancora stata inserita nessuna tipologia.</p>
+            {% endif %}
+        </div>
+        <h3>Aggiungi nuova tipologia</h3>
+    {% endif %}
 
     {% crispy form %}
 

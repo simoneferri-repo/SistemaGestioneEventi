@@ -38,14 +38,17 @@
                     <a class="nav-link" href="/eventi_inseriti/">Gestione eventi</a>
                 </li>
                 <li class="nav-item">
-                 <a href="/gestione_eventi/" class="btn btn-primary" role="button"><i class="bi bi-calendar-plus"></i> Aggiungi evento</a>
+                 <a href="/gestione_eventi/" class="btn btn-primary btn-sm" role="button"><i class="bi bi-calendar-plus"></i> Aggiungi evento</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/gestione_tipologia/" class="btn btn-primary btn-sm ms-lg-2" role="button"><i class="bi bi-plus-square"></i> Aggiungi tipologia</a>
                 </li>
             {% endif %}
           </ul>
           <span class="navbar-text">
             {% if user.is_authenticated %}
                 <span class="navbar-text me-3">
-                    Utente loggato: <strong>{{ user.username }}</strong>
+                   <i class="bi bi-person-circle"></i> Utente loggato: <strong>{{ user.username }}</strong>
                 </span>
                 <form method="post" action="{% url 'logout' %}" class="d-inline">
                     {% csrf_token %}
