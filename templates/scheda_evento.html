@@ -4,8 +4,8 @@
     {% if messages %}
         <div class="messages-container mt-3">
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message|safe }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endfor %}
@@ -23,25 +23,25 @@
     {% endif %}
 
     <p>
+    {% if evento.posti_prenotabili > 0 %}
+        <p>Posti disponibili: <span class="badge bg-success">{{ evento.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento.prenotazione_set.count }}</span></p>
+    {% else %}
+        <p class="alert alert-warning d-inline-block"><i class="bi bi-calendar-x"></i> Disponibilità esaurita, sono stati prenotati tutti i {{ evento.prenotazione_set.count }} disponibili</p>
+    {% endif %}
     {% if user.is_authenticated and not prenotazione_attiva and not user|has_group:"redattori" %}
-        {% if evento.posti_prenotabili > 0 %}
-            <p>Posti disponibili: {{ evento.posti_prenotabili}}</p>
-            <form method="post" action="{% url 'prenota_evento' evento.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success btn-lg">
-                    <i class="bi bi-calendar-plus"></i> Prenota
-                </button>
-            </form>
-        {% else %}
-            <p class="alert alert-warning d-inline-block"><i class="bi bi-calendar-x"></i> Posti Esauriti</p>
-        {% endif %}
+        <form method="post" action="{% url 'prenota_evento' evento.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-lg">
+                <i class="bi bi-calendar-plus"></i> Prenota
+            </button>
+        </form>
     {% elif prenotazione_attiva %}
-        <div class="alert alert-light d-inline-block">
+        <div class="alert alert-light d-inline-block p-2">
             <p class="m-1"><i class="bi bi-calendar-check"></i> Evento già prenotato</p>
         </div>
         <form method="post" action="{% url 'cancella_evento' evento.id %}" class="d-inline-block">
             {% csrf_token %}
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-secondary">
                 <i class="bi bi-trash"></i> Cancella prenotazione
             </button>
         </form>
@@ -50,11 +50,17 @@
          <div class="alert alert-primary d-inline-block">
             <i class="bi bi-pencil-square"></i> <a href="{% url 'gestione_eventi_modifica' evento.id %}" class="alert-link">Modifica l'evento</a>
         </div>
-        <div class="alert alert-primary d-inline-block">
-            <i class="bi bi-pencil-square"></i> <a href="{% url 'gestione_eventi_elimina' evento.pk %}" class="alert-link">Elimina evento</a>
-        </div>
+        {% if  evento.prenotazione_set.count > 0 %}
+            <div class="alert alert-warning d-inline-block">
+                <i class="bi bi-exclamation-triangle"></i> Evento non eliminabile!
+            </div>
+        {% else %}
+             <div class="alert alert-primary d-inline-block">
+                <i class="bi bi-x-circle"></i> <a href="{% url 'gestione_eventi_elimina' evento.pk %}" class="alert-link">Elimina evento</a>
+            </div>
+        {% endif %}
 
-        <div class="alert alert-warning d-inline-block">
+        <div class="alert alert-secondary">
             <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
         </div>
     {% else %}

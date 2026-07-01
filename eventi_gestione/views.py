@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Eventi, Tipologia
@@ -63,6 +64,14 @@ class EventiDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         evento = self.get_object()
         return self.request.user == evento.creatore
+    def form_valid(self, form):
+        evento = self.get_object()
+
+        if evento.prenotazione_set.exists():
+            messages.error(self.request, f"<i class='bi bi-exclamation-circle'></i>Impossibile cancellare '{evento.nome_evento}': ci sono {evento.prenotazione_set.count()} prenotazioni attive.")
+            return redirect('evento', pk=evento.pk)
+
+        return super().form_valid(form)
 
 class TipologiaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Tipologia

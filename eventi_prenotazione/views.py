@@ -27,10 +27,10 @@ class PrenotazioneView(LoginRequiredMixin, View):
                 )
                 evento.posti_prenotabili -= 1
                 evento.save()
-                messages.success(request, "L'evento è stato prenotato correttamente!")
+                messages.success(request, "<i class='bi bi-info-circle'></i> L'evento è stato prenotato correttamente!")
             except IntegrityError as e:
                 print(f"Errore nel salvataggio sul Database: {e}")
-                messages.error(request, "Errore durante il salvataggio della prenotazione.")
+                messages.error(request, "<i class='bi bi-exclamation-circle'></i> Errore durante il salvataggio della prenotazione.")
             except Exception as e:
                 print(f"Errore generico: {e}")
                 messages.error(request, f"Errore generico: {e}")
@@ -56,15 +56,15 @@ class CancellazioneView(LoginRequiredMixin, View):
                 ).delete()
                 evento.posti_prenotabili += 1
                 evento.save()
-                messages.success(request, "La prenotazione è stata correttamente cancellata!")
+                messages.success(request, "<i class='bi bi-info-circle'></i> La prenotazione è stata correttamente cancellata!")
             except IntegrityError as e:
                 print(f"Errore nel salvataggio sul Database: {e}")
-                messages.error(request, "Errore durante il salvataggio della prenotazione.")
+                messages.error(request, "<i class='bi bi-exclamation-circle'></i> Errore durante il salvataggio della prenotazione.")
             except Exception as e:
                 print(f"Errore generico: {e}")
-                messages.error(request, f"Errore generico: {e}")
+                messages.error(request, f"<i class='bi bi-exclamation-circle'></i> Errore generico: {e}")
         else:
-            messages.error(request, "Non ci sono prenotazioni da cancellare.")
+            messages.error(request, "<i class='bi bi-exclamation-circle'></i> Non ci sono prenotazioni da cancellare.")
 
         return HttpResponseRedirect(reverse('evento', kwargs={'pk': evento.id}))
 
