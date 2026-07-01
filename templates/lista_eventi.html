@@ -13,6 +13,9 @@
                             <p class="card-text">
                                 {{ evento.tipo_evento}}<br>
                                 {{ evento.data_ora_evento }}<br>
+                                {% if evento.annullato %}
+                                    <p class="badge bg-danger fs-5">Evento annullato!</p>
+                                {% endif %}
                             </p>
                         </div>
                 </div>

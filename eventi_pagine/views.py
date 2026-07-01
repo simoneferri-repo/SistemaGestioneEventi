@@ -2,6 +2,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 from eventi_gestione.models import Eventi
 from django.contrib.auth.mixins import LoginRequiredMixin
 from eventi_prenotazione.models import Prenotazione
+from django.contrib import messages
 from django.utils import timezone
 
 
@@ -12,6 +13,23 @@ class HomePageView(TemplateView):
         ora_attuale = timezone.now()
         context = super().get_context_data(**kwargs)
         context['eventi_prossimi'] = Eventi.objects.filter(data_ora_evento__gte=ora_attuale).order_by('data_ora_evento')[:6]
+
+        if self.request.user.is_authenticated:
+
+            prenotazioni_annullate = Prenotazione.objects.filter(
+                utente=self.request.user,
+                evento__annullato=True
+            )
+
+            if prenotazioni_annullate.exists():
+                testo_msg_annullato = "<i class='fs-4 bi bi-exclamation-triangle'></i> Uno o più eventi a cui eri prenotato sono stati annullati <i class='fs-4 bi bi-exclamation-triangle'></i> <ul>"
+
+                for prenotazione in prenotazioni_annullate:
+                    testo_msg_annullato += f"<li><a href='/eventi/{prenotazione.evento.id}/'>{prenotazione.evento.nome_evento} del {prenotazione.evento.data_ora_evento.strftime('%d/%m/%Y ore %H:%M')}</a></li>"
+
+                testo_msg_annullato += "</ul><p>Per far sparire questo avviso è necessario annullare manualmente la prenotazione.</p>"
+
+                messages.error(self.request,testo_msg_annullato)
 
         return context
 

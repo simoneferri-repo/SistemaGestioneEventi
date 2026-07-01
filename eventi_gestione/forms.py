@@ -14,7 +14,7 @@ class GestioneEventiForm(ModelForm):
     )
     class Meta:
         model = Eventi
-        fields = ['nome_evento', 'descrizione_evento', 'tipo_evento', 'luogo_evento', 'data_ora_evento', 'immagine_evento', 'posti_prenotabili']
+        fields = ['nome_evento', 'descrizione_evento', 'tipo_evento', 'luogo_evento', 'data_ora_evento', 'immagine_evento', 'posti_prenotabili', 'annullato']
         #fields = '--__all__'
 
     def __init__(self, *args, **kwargs):
@@ -51,6 +51,9 @@ class GestioneEventiForm(ModelForm):
             ),
             Row(
                 Column(Field('posti_prenotabili', placeholder='N. posti prenotabili'), css_class='col-md-3'),
+            ),
+            Row(
+                Column(Field('annullato', placeholder='Evento annullato'), css_class='col-md-3'),
             ),
             Submit('submit', 'Salva', css_class='btn btn-primary mt-2'),
         )

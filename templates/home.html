@@ -1,6 +1,18 @@
 {% extends "base.html" %}
+{% load auth_extras %}
 {% block content %}
-    <h2>I prossimi eventi</h2>
+    {% if messages %}
+        <div class="messages-container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message|safe }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <h2>I prossimi 6 eventi in progamma</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for evento in eventi_prossimi %}
         <div class="col">

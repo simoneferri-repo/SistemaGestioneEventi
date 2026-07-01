@@ -68,7 +68,7 @@ class EventiDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         evento = self.get_object()
 
         if evento.prenotazione_set.exists():
-            messages.error(self.request, f"<i class='bi bi-exclamation-circle'></i>Impossibile cancellare '{evento.nome_evento}': ci sono {evento.prenotazione_set.count()} prenotazioni attive.")
+            messages.error(self.request, f"<i class='bi bi-exclamation-circle'></i>Impossibile cancellare '{evento.nome_evento}': ci sono {evento.prenotazione_set.count()} prenotazioni attive. È possibile solo annullare l'evento")
             return redirect('evento', pk=evento.pk)
 
         return super().form_valid(form)

@@ -16,7 +16,11 @@
                         <div class="col-md-10">
 
                                 <div class="card-body">
-                                    <h3 class="card-title" class="h5"><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a></h3>
+                                    <h3 class="card-title" class="h5"><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a>
+                                        {% if evento_inserito.annullato %}
+                                            <p class="badge bg-danger fs-5">Evento annullato!</p>
+                                        {% endif %}
+                                    </h3>
                                     <p class="card-text">
                                         {{ evento_inserito.tipo_evento}}<br>
                                         {{ evento_inserito.data_ora_evento }}<br>
