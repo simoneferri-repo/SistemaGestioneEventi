@@ -47,15 +47,26 @@
           </ul>
           <span class="navbar-text">
             {% if user.is_authenticated %}
-                <span class="navbar-text me-3">
-                   <i class="bi bi-person-circle"></i> Utente loggato: <strong>{{ user.username }}</strong>
-                </span>
-                <form method="post" action="{% url 'logout' %}" class="d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                        Esci
-                    </button>
-                </form>
+                <div class="navbar-text me-3">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i> {{ user.username }} <span class="visually-hidden">Menu utente</span>
+                        </button>
+                        <ul class="dropdown-menu px-2">
+                            <li><a class="dropdown-item" href="/profilo/edit/"><i class="bi bi-person-gear"></i> Modifica utente </a></li>
+                            <li><a class="dropdown-item" href="/profilo/cambia-password/"><i class="bi bi-person-lock"></i> Cambia password </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        Esci
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             {% else %}
                 <a href="/login/" class="btn btn-primary text-bg-primary" role="button">Sign in</a>
                 <a href="/signup" class="btn btn-secondary text-bg-secondary" role="button">Sign up</a>
