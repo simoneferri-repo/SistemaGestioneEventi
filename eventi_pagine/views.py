@@ -20,6 +20,10 @@ class HomePageView(TemplateView):
                 utente=self.request.user,
                 evento__annullato=True
             )
+            context['prenotazioni_attive'] = Prenotazione.objects.filter(
+                utente=self.request.user,
+                evento__annullato=False
+            ).order_by('evento__data_ora_evento')[:3]
 
             if prenotazioni_annullate.exists():
                 testo_msg_annullato = "<i class='fs-4 bi bi-exclamation-triangle'></i> Uno o più eventi a cui eri prenotato sono stati annullati <i class='fs-4 bi bi-exclamation-triangle'></i> <ul>"
@@ -48,6 +52,28 @@ class UserEventListView(LoginRequiredMixin,ListView):
     model = Prenotazione
     template_name = "prenotazioni_utente.html"
     context_object_name = 'prenotazioni_utente'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+
+            prenotazioni_annullate = Prenotazione.objects.filter(
+                utente=self.request.user,
+                evento__annullato=True
+            )
+
+            if prenotazioni_annullate.exists():
+                testo_msg_annullato = "<i class='fs-4 bi bi-exclamation-triangle'></i> Uno o più eventi a cui eri prenotato sono stati annullati <i class='fs-4 bi bi-exclamation-triangle'></i> <ul>"
+
+                for prenotazione in prenotazioni_annullate:
+                    testo_msg_annullato += f"<li><a href='/eventi/{prenotazione.evento.id}/'>{prenotazione.evento.nome_evento} del {prenotazione.evento.data_ora_evento.strftime('%d/%m/%Y ore %H:%M')}</a></li>"
+
+                testo_msg_annullato += "</ul><p>Per far sparire questo avviso è necessario annullare manualmente la prenotazione.</p>"
+
+                messages.error(self.request,testo_msg_annullato)
+
+        return context
 
     def get_queryset(self):
         return Prenotazione.objects.filter(utente=self.request.user).select_related('evento').order_by('evento__data_ora_evento')

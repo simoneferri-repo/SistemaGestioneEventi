@@ -11,7 +11,27 @@
             {% endfor %}
         </div>
     {% endif %}
-
+    {% if prenotazioni_attive %}
+        <h2>I prossimi {{ prenotazioni_attive|length }} eventi prenotati</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for prenotazione in prenotazioni_attive %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if prenotazione.evento.immagine_evento %}
+                            <img src="{{ prenotazione.evento.immagine_evento.url }}" class="card-img-top" alt="">
+                        {% endif %}
+                        <div class="card-body">
+                            <h3 class="card-title" class="h5"><a href="{% url 'evento' prenotazione.evento.id %}">{{ prenotazione.evento.nome_evento }}</a></h3>
+                            <p class="card-text">
+                                {{ prenotazione.evento.tipo_evento}}<br>
+                                {{ prenotazione.evento.data_ora_evento|date:"d F Y \o\r\e H:i" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     <h2>I prossimi 6 eventi in progamma</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for evento in eventi_prossimi %}

@@ -1,7 +1,12 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CustomUserCreationForm
 from django.contrib.auth.models import Group
+from django.contrib.auth import get_user_model
+
+from .models import CustomUser
+
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
@@ -14,3 +19,15 @@ class SignUpView(CreateView):
         gruppo_visitatori, created = Group.objects.get_or_create(name='visitatori')
         nuovo_utente.groups.add(gruppo_visitatori)
         return response
+
+User = get_user_model()
+
+class EditUserView(LoginRequiredMixin, UpdateView):
+    model = User
+    template_name = 'edit_profilo.html'
+    success_url = reverse_lazy('home')
+
+    fields = ['username', 'first_name', 'last_name', 'email', 'eta', 'telefono']
+
+    def get_object(self, queryset=None):
+        return self.request.user
