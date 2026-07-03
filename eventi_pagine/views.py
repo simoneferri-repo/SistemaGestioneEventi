@@ -24,6 +24,9 @@ class HomePageView(TemplateView):
                 utente=self.request.user,
                 evento__annullato=False
             ).order_by('evento__data_ora_evento')[:3]
+            context['eventi_prenotati_ids'] = set(
+                Prenotazione.objects.filter(utente=self.request.user).values_list('evento_id', flat=True)
+            )
 
             if prenotazioni_annullate.exists():
                 testo_msg_annullato = "<i class='fs-4 bi bi-exclamation-triangle'></i> Uno o più eventi a cui eri prenotato sono stati annullati <i class='fs-4 bi bi-exclamation-triangle'></i> <ul>"
@@ -42,10 +45,16 @@ class EventListView(ListView):
     template_name = "lista_eventi.html"
     context_object_name = 'eventi'
 
+
     def get_context_data(self, **kwargs):
         ora_attuale = timezone.now()
         context = super().get_context_data(**kwargs)
         context['eventi_futuri'] = Eventi.objects.filter(data_ora_evento__gte=ora_attuale).order_by('data_ora_evento')
+
+        if self.request.user.is_authenticated:
+            context['eventi_prenotati_ids'] = set(
+                Prenotazione.objects.filter(utente=self.request.user).values_list('evento_id', flat=True)
+            )
 
         return context
 class UserEventListView(LoginRequiredMixin,ListView):

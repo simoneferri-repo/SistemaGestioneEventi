@@ -16,6 +16,9 @@
                                 {% if evento.annullato %}
                                     <p class="badge bg-danger fs-5">Evento annullato!</p>
                                 {% endif %}
+                                {% if evento.id in eventi_prenotati_ids %}
+                                    <p class="badge bg-light text-dark fs-5">Evento prenotato</p>
+                                {% endif %}
                             </p>
                         </div>
                 </div>

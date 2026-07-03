@@ -12,12 +12,11 @@
         </div>
     {% endif %}
 
-    <p>Scheda singolo eventi</p>
-    <h1>{{ evento.nome_evento }}
+    <h2 class="mt-5">{{ evento.nome_evento }}
         {% if evento.annullato %}
             <span class="badge bg-danger fs-5">Evento annullato!</span>
         {% endif %}
-    </h1>
+    </h2>
     <p>Data: {{ evento.data_ora_evento }}</p>
     <p>Luogo: {{ evento.luogo_evento}}</p>
     <p>Tipologia: {{ evento.tipo_evento}}</p>
