@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load auth_extras %}
 {% block content %}
+    {% now "Y-m-d H:i:s" as ora_attuale %}
     {% if messages %}
         <div class="messages-container mt-3">
             {% for message in messages %}
@@ -29,30 +30,7 @@
     {% endif %}
 
     <p>
-    {% if evento.posti_prenotabili > 0 and not evento.annullato %}
-        <p>Posti disponibili: <span class="badge bg-success">{{ evento.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento.prenotazione_set.count }}</span> {% if evento.prenotazione_set.count > 0 %} (<a href="/eventi/{{ evento.id }}/prenotazioni/">Dettaglio prenotazioni</a>) {% endif %}</p>
-    {% elif not evento.annullato %}
-        <p class="alert alert-warning d-inline-block"><i class="bi bi-calendar-x"></i> Disponibilità esaurita, sono stati prenotati tutti i {{ evento.prenotazione_set.count }} disponibili</p>
-    {% endif %}
-    {% if user.is_authenticated and not prenotazione_attiva and not user|has_group:"redattori" and not evento.annullato %}
-        <form method="post" action="{% url 'prenota_evento' evento.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success btn-lg">
-                <i class="bi bi-calendar-plus"></i> Prenota
-            </button>
-        </form>
-    {% elif prenotazione_attiva %}
-        <div class="alert alert-light d-inline-block p-2">
-            <p class="m-1"><i class="bi bi-calendar-check"></i> Evento già prenotato</p>
-        </div>
-        <form method="post" action="{% url 'cancella_evento' evento.id %}" class="d-inline-block">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-secondary">
-                <i class="bi bi-trash"></i> Cancella prenotazione
-            </button>
-        </form>
-
-    {% elif is_creatore %}
+    {% if is_creatore %}
          <div class="alert alert-primary d-inline-block">
             <i class="bi bi-pencil-square"></i> <a href="{% url 'gestione_eventi_modifica' evento.id %}" class="alert-link">Modifica l'evento</a>
         </div>
@@ -65,14 +43,39 @@
                 <i class="bi bi-x-circle"></i> <a href="{% url 'gestione_eventi_elimina' evento.pk %}" class="alert-link">Elimina evento</a>
             </div>
         {% endif %}
-
-        <div class="alert alert-secondary">
-            <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
-        </div>
-    {% elif not evento.annullato %}
-         <div class="alert alert-warning d-inline-block">
-            <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
-        </div>
+        {% if evento.data_ora_evento|date:"Y-m-d H:i:s" > ora_attuale %}
+            <div class="alert alert-secondary">
+                <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
+            </div>
+        {% endif %}
+    {% else %}
+        {% if evento.posti_prenotabili > 0 or prenotazione_attiva %}
+            <p>Posti disponibili: <span class="badge bg-success">{{ evento.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento.prenotazione_set.count }}</span> {% if evento.prenotazione_set.count > 0 and is_creatore %} (<a href="/eventi/{{ evento.id }}/prenotazioni/">Dettaglio prenotazioni</a>) {% endif %}</p>
+            {% if user.is_authenticated and not prenotazione_attiva and not user|has_group:"redattori" and not evento.annullato and evento.data_ora_evento|date:"Y-m-d H:i:s" > ora_attuale %}
+                <form method="post" action="{% url 'prenota_evento' evento.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-calendar-plus"></i> Prenota
+                    </button>
+                </form>
+            {% elif prenotazione_attiva and evento.data_ora_evento|date:"Y-m-d H:i:s" > ora_attuale %}
+                <div class="alert alert-light d-inline-block p-2">
+                    <p class="m-1"><i class="bi bi-calendar-check"></i> Evento già prenotato</p>
+                </div>
+                <form method="post" action="{% url 'cancella_evento' evento.id %}" class="d-inline-block">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-secondary">
+                        <i class="bi bi-trash"></i> Cancella prenotazione
+                    </button>
+                </form>
+            {% elif not evento.annullato and evento.data_ora_evento|date:"Y-m-d H:i:s" > ora_attuale %}
+                 <div class="alert alert-warning d-inline-block">
+                    <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
+                </div>
+            {% endif %}
+        {% elif not evento.annullato and evento.data_ora_evento|date:"Y-m-d H:i:s" > ora_attuale %}
+            <p class="alert alert-warning d-inline-block"><i class="bi bi-calendar-x"></i> Disponibilità esaurita, sono stati prenotati tutti i {{ evento.prenotazione_set.count }} disponibili</p>
+        {% endif %}
     {% endif %}
     </p>
 {% endblock content %}

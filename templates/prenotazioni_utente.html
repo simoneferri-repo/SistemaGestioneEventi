@@ -10,7 +10,7 @@
             {% endfor %}
         </div>
     {% endif %}
-    <h2 class="mt-5">Lista eventi prenotati</h2>
+    <h2 class="mt-5">Lista dei prossimi eventi prenotati</h2>
 
     {% if prenotazioni_utente %}
         <p>Ci sono {{ prenotazioni_utente.count }} prenotazioni attive.</p>
@@ -34,6 +34,32 @@
         </div>
     {% else %}
         <p class="alert alert-warning" role="alert">Nessun evento prenotato</p>
+    {% endif %}
+
+    <h2 class="mt-5">Lista degli eventi prenotati in passato</h2>
+
+    {% if prenotazioni_passate %}
+        <p>Ci sono {{ prenotazioni_passate.count }} prenotazioni passate.</p>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for prenotato_old in prenotazioni_passate %}
+                <div class="col">
+                    <div class="card h-100">
+                            {% if prenotato_old.evento.immagine_evento %}
+                                <img src="{{ prenotato_old.evento.immagine_evento.url }}" class="card-img-top" alt="">
+                            {% endif %}
+                            <div class="card-body">
+                                <h3 class="card-title" class="h5"><a href="{% url 'evento' prenotato_old.evento.id %}">{{ prenotato_old.evento.nome_evento }}</a></h3>
+                                <p class="card-text">
+                                    {{ prenotato_old.evento.tipo_evento}}<br>
+                                    {{ prenotato_old.evento.data_ora_evento }}<br>
+                                </p>
+                            </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="alert alert-warning" role="alert">Non ci sono eventi passati prenotati</p>
     {% endif %}
 
 {% endblock content %}

@@ -16,10 +16,10 @@ class Eventi(models.Model):
     tipo_evento = models.ForeignKey(Tipologia,on_delete=models.CASCADE)
     luogo_evento = models.CharField(max_length=100)
     data_ora_evento = models.DateTimeField()
-    immagine_evento = models.ImageField(upload_to='eventi/', blank=True, null=True)
+    immagine_evento = models.ImageField(upload_to='eventi/', blank=True)
     posti_prenotabili = models.PositiveIntegerField(null=True, blank=True)
-    pubblicato = models.BooleanField(default=False, blank=True, null=True)
-    annullato = models.BooleanField(default=False,blank=True, null=True)
+    pubblicato = models.BooleanField(default=False)
+    annullato = models.BooleanField(default=False)
     creatore = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='eventi_creati', limit_choices_to={'groups__name': 'redattori'})
 
     def __str__(self):

@@ -51,10 +51,13 @@ class EventiUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if not self.request.FILES.get('immagine_evento'):
             form.instance.immagine_evento = evento.immagine_evento
 
-        if evento.prenotazione_set.exists():
-            messages.error(self.request,
-                       f"<i class='bi bi-exclamation-circle'></i> Impossibile spubblicare '{evento.nome_evento}': ci sono {evento.prenotazione_set.count()} prenotazioni attive. È possibile solo annullare l'evento")
-            return redirect('evento', pk=evento.pk)
+        nuovo_stato_pubblicato = form.cleaned_data.get('pubblicato')
+
+        if evento.pubblicato and nuovo_stato_pubblicato is False:
+            if evento.prenotazione_set.exists():
+                messages.error(self.request,
+                           f"<i class='bi bi-exclamation-circle'></i> Impossibile spubblicare '{evento.nome_evento}': ci sono {evento.prenotazione_set.count()} prenotazioni attive. È possibile solo annullare l'evento")
+                return redirect('evento', pk=evento.pk)
 
         return super().form_valid(form)
 

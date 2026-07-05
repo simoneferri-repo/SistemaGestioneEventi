@@ -6,16 +6,28 @@ from crispy_forms.layout import Layout, Submit, Row, Column, Field, HTML
 
 class GestioneEventiForm(ModelForm):
     data_ora_evento = forms.DateTimeField(
-        input_formats=['%d/%m/%Y %H:%M'],
+        input_formats=['%Y-%m-%dT%H:%M', '%d/%m/%Y %H:%M'],
         widget=forms.DateTimeInput(
-            format='%d/%m/%Y %H:%M',
-            attrs={'placeholder': 'gg/mm/aaaa hh:mm'}
-        )
+            attrs={
+                'type': 'datetime-local',
+                'class': 'form-control'
+            },
+            format='%Y-%m-%dT%H:%M'
+        ),
+        label="Data e ora dell'evento"
     )
+
+#    data_ora_evento = forms.DateTimeField(
+#        input_formats=['%d/%m/%Y %H:%M'],
+#        widget=forms.DateTimeInput(
+#            format='%d/%m/%Y %H:%M',
+#            attrs={'placeholder': 'gg/mm/aaaa hh:mm'}
+#        )
+#    )
     class Meta:
         model = Eventi
         fields = ['nome_evento', 'descrizione_evento', 'tipo_evento', 'luogo_evento', 'data_ora_evento', 'immagine_evento', 'posti_prenotabili', 'annullato', 'pubblicato']
-        #fields = '--__all__'
+
 
     def __init__(self, *args, **kwargs):
         current_user = kwargs.pop('user', None)
@@ -34,19 +46,24 @@ class GestioneEventiForm(ModelForm):
                             </div>
                         ''')
 
+        if hasattr(self.instance, 'data_ora_evento') and self.instance.data_ora_evento:
+            self.initial['data_ora_evento'] = self.instance.data_ora_evento.strftime('%Y-%m-%d %H:%M')
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.attrs = {'enctype': 'multipart/form-data'}
         self.helper.layout = Layout(
             Column(creatore_html, css_class='col-md-4'),
-            Field('nome_evento', placeholder='Titolo evento'),
-            Field('descrizione_evento', rows=4),
             Row(
                 Column(Field('tipo_evento'), css_class='col-md-6'),
+            ),
+            Field('nome_evento', placeholder='Titolo evento'),
+            Field('descrizione_evento', rows=4),
+
+            Row(
                 Column(Field('luogo_evento', placeholder='Luogo dell\'evento'), css_class='col-md-6'),
+                Column(Field('data_ora_evento'), css_class='col-md-6'),
             ),
             Row(
-                Column(Field('data_ora_evento'), css_class='col-md-6'),
                 Column(Field('immagine_evento'), css_class='col-md-6'),
             ),
             Row(

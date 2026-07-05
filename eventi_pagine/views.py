@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from eventi_gestione.models import Eventi
 from django.contrib.auth.mixins import LoginRequiredMixin
-from eventi_prenotazione.models import Prenotazione
+from eventi_prenotazione.models import Prenotazione, Eventi
 from django.contrib import messages
 from django.utils import timezone
 from django.http import Http404
@@ -16,11 +16,14 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['eventi_prossimi'] = Eventi.objects.filter(data_ora_evento__gte=ora_attuale, pubblicato=True).order_by('data_ora_evento')[:6]
 
+
+
         if self.request.user.is_authenticated:
 
             prenotazioni_annullate = Prenotazione.objects.filter(
                 utente=self.request.user,
-                evento__annullato=True
+                evento__annullato=True,
+                evento__data_ora_evento__gte=timezone.now()
             )
             context['prenotazioni_attive'] = Prenotazione.objects.filter(
                 utente=self.request.user,
@@ -71,7 +74,8 @@ class UserEventListView(LoginRequiredMixin,ListView):
 
             prenotazioni_annullate = Prenotazione.objects.filter(
                 utente=self.request.user,
-                evento__annullato=True
+                evento__annullato=True,
+                evento__data_ora_evento__gte = timezone.now()
             )
 
             if prenotazioni_annullate.exists():
@@ -84,15 +88,27 @@ class UserEventListView(LoginRequiredMixin,ListView):
 
                 messages.error(self.request,testo_msg_annullato)
 
+        context['prenotazioni_passate'] = Prenotazione.objects.filter(utente=self.request.user,evento__data_ora_evento__lt = timezone.now()).select_related('evento').order_by('-evento__data_ora_evento')
+
         return context
 
     def get_queryset(self):
-        return Prenotazione.objects.filter(utente=self.request.user).select_related('evento').order_by('evento__data_ora_evento')
+        return Prenotazione.objects.filter(utente=self.request.user, evento__data_ora_evento__gte=timezone.now()).select_related('evento').order_by('evento__data_ora_evento')
 
 class EventDetailView(DetailView):
     model = Eventi
     template_name = "scheda_evento.html"
     context_object_name = 'evento'
+
+    def render_to_response(self, context, **response_kwargs):
+        evento = self.object
+
+        if evento.data_ora_evento < timezone.now():
+            response_kwargs['status'] = 404
+            messages.error(self.request,
+                       f"<i class='bi bi-exclamation-triangle'></i> Attenzione! L'evento che stai guardando è già passato.! La scheda viene mantenuta solo per motivi di archivio.")
+
+        return super().render_to_response(context, **response_kwargs)
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
@@ -125,8 +141,14 @@ class EditorEventListView(LoginRequiredMixin, ListView):
     context_object_name = 'gestione_eventi_elenco'
 
     def get_queryset(self):
-        return Eventi.objects.filter(creatore=self.request.user)
+        return Eventi.objects.filter(creatore=self.request.user, data_ora_evento__gte = timezone.now()).order_by('data_ora_evento')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['eventi_inseriti_passati'] = Eventi.objects.filter(creatore=self.request.user,data_ora_evento__lt = timezone.now()).order_by('data_ora_evento')
+
+        return context
 
 class EventPrenotazioniListView(ListView):
     model = Prenotazione
