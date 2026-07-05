@@ -12,7 +12,7 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         ora_attuale = timezone.now()
         context = super().get_context_data(**kwargs)
-        context['eventi_prossimi'] = Eventi.objects.filter(data_ora_evento__gte=ora_attuale).order_by('data_ora_evento')[:6]
+        context['eventi_prossimi'] = Eventi.objects.filter(data_ora_evento__gte=ora_attuale, pubblicato=True).order_by('data_ora_evento')[:6]
 
         if self.request.user.is_authenticated:
 
@@ -49,7 +49,7 @@ class EventListView(ListView):
     def get_context_data(self, **kwargs):
         ora_attuale = timezone.now()
         context = super().get_context_data(**kwargs)
-        context['eventi_futuri'] = Eventi.objects.filter(data_ora_evento__gte=ora_attuale).order_by('data_ora_evento')
+        context['eventi_futuri'] = Eventi.objects.filter(data_ora_evento__gte=ora_attuale, pubblicato=True).order_by('data_ora_evento')
 
         if self.request.user.is_authenticated:
             context['eventi_prenotati_ids'] = set(
