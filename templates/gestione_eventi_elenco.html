@@ -1,7 +1,26 @@
 {% extends "base.html" %}
+{% load auth_extras %}
 {% block content %}
-    <h2 class="mt-5">Lista eventi inseriti</h2>
+        {% if user.is_authenticated and user|has_group:"redattori" %}
+        <nav class="navbar navbar-expand navbar-light bg-white mt-2">
+            <div class="container-fluid">
+                <div class="navbar-nav me-auto">
+                </div>
+                <div class="d-flex align-items-center">
 
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item me-2">
+                            <a href="/gestione_eventi/" class="btn btn-primary btn-sm bd-white" role="button"><i class="bi bi-calendar-plus"></i> Aggiungi evento</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/gestione_tipologia/" class="btn btn-primary btn-sm ms-lg-2" role="button"><i class="bi bi-plus-square"></i> Aggiungi tipologia</a>
+                        </li>
+		            <ul>
+                </div>
+            </div>
+        </nav>
+    {% endif %}
+    <h2 class="{% if user.is_authenticated and not user|has_group:"redattori" %} mt-5 {% endif %}">Lista eventi inseriti</h2>
     {% if gestione_eventi_elenco %}
         <p>Hai inserito {{ gestione_eventi_elenco.count }} eventi.</p>
 
@@ -19,6 +38,9 @@
                                     <h3 class="card-title" class="h5"><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a>
                                         {% if evento_inserito.annullato %}
                                             <p class="badge bg-danger fs-5">Evento annullato!</p>
+                                        {% endif %}
+                                        {% if not evento_inserito.pubblicato %}
+                                            <p class="badge bg-secondary fs-5">Evento non pubblicato!</p>
                                         {% endif %}
                                     </h3>
                                     <p class="card-text">

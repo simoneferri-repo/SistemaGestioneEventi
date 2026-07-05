@@ -4,6 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from eventi_prenotazione.models import Prenotazione
 from django.contrib import messages
 from django.utils import timezone
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 
 class HomePageView(TemplateView):
@@ -92,6 +94,15 @@ class EventDetailView(DetailView):
     template_name = "scheda_evento.html"
     context_object_name = 'evento'
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+
+        if not obj.pubblicato:
+            is_redattore = self.request.user.groups.filter(name='redattori').exists()
+            if not is_redattore:
+                raise Http404("Evento non pubblicato")
+
+        return obj
     def get_context_data(self, **kwargs):
         #global prenotazione_on
         context = super().get_context_data(**kwargs)
@@ -115,3 +126,18 @@ class EditorEventListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Eventi.objects.filter(creatore=self.request.user)
+
+
+class EventPrenotazioniListView(ListView):
+    model = Prenotazione
+    template_name = 'prenotazioni_evento.html'
+    context_object_name = 'prenotazioni'
+
+    def get_queryset(self):
+        self.evento = get_object_or_404(Eventi, pk=self.kwargs['evento_id'])
+        return Prenotazione.objects.filter(evento=self.evento).order_by('data_prenotazione')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['evento'] = self.evento
+        return context

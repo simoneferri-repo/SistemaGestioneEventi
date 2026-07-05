@@ -42,7 +42,7 @@ class PrenotazioneView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(reverse('eventi'))
 
-class CancellazioneView(LoginRequiredMixin, View):
+class CancellazionePrenotazioneView(LoginRequiredMixin, View):
 
     def post(self, request, evento_id):
         evento = get_object_or_404(Eventi, id=evento_id)

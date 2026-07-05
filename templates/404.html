@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="alert alert-danger" role="alert">
-        <p>La pagina chiamata non esiste!</p>
-        <a href="/">Torna alla home del sito.</p>
+        {% if exception == "Evento non pubblicato" %}
+            <p>{{ exception }}</p>
+            <p><a href="/">Torna alla home del sito.</a></p>
+        {% else %}
+            <p>La pagina chiamata non esiste!</p>
+            <p><a href="/">Torna alla home del sito.</a></p>
+        {% endif %}
     </div>
 {% endblock content %}

@@ -16,6 +16,9 @@
         {% if evento.annullato %}
             <span class="badge bg-danger fs-5">Evento annullato!</span>
         {% endif %}
+        {% if not evento.pubblicato %}
+            <span class="badge bg-secondary fs-5">Evento non pubblicato!</span>
+        {% endif %}
     </h2>
     <p>Data: {{ evento.data_ora_evento }}</p>
     <p>Luogo: {{ evento.luogo_evento}}</p>
@@ -27,7 +30,7 @@
 
     <p>
     {% if evento.posti_prenotabili > 0 and not evento.annullato %}
-        <p>Posti disponibili: <span class="badge bg-success">{{ evento.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento.prenotazione_set.count }}</span></p>
+        <p>Posti disponibili: <span class="badge bg-success">{{ evento.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento.prenotazione_set.count }}</span> {% if evento.prenotazione_set.count > 0 %} (<a href="/eventi/{{ evento.id }}/prenotazioni/">Dettaglio prenotazioni</a>) {% endif %}</p>
     {% elif not evento.annullato %}
         <p class="alert alert-warning d-inline-block"><i class="bi bi-calendar-x"></i> Disponibilità esaurita, sono stati prenotati tutti i {{ evento.prenotazione_set.count }} disponibili</p>
     {% endif %}
@@ -54,8 +57,8 @@
             <i class="bi bi-pencil-square"></i> <a href="{% url 'gestione_eventi_modifica' evento.id %}" class="alert-link">Modifica l'evento</a>
         </div>
         {% if  evento.prenotazione_set.count > 0 %}
-            <div class="alert alert-warning d-inline-block">
-                <i class="bi bi-exclamation-triangle"></i> Evento non eliminabile!
+            <div class="alert alert-warning d-inline-block" >
+                <i class="bi bi-exclamation-triangle"></i> Evento non eliminabile! Sono attive n. {{ evento.prenotazione_set.count }} prenotazioni.
             </div>
         {% else %}
              <div class="alert alert-primary d-inline-block">

@@ -12,7 +12,7 @@
                             <h3 class="card-title" class="h5"><a href="{% url 'evento' evento.id %}">{{ evento.nome_evento }}</a></h3>
                             <p class="card-text">
                                 {{ evento.tipo_evento}}<br>
-                                {{ evento.data_ora_evento }}<br>
+                                {{ evento.data_ora_evento|date:"d F Y \o\r\e H:i" }}<br>
                                 {% if evento.annullato %}
                                     <p class="badge bg-danger fs-5">Evento annullato!</p>
                                 {% endif %}
