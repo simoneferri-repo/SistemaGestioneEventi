@@ -20,9 +20,9 @@
             </div>
         </nav>
     {% endif %}
-    <h2 class="{% if user.is_authenticated and not user|has_group:"redattori" %} mt-5 {% endif %}">Lista eventi inseriti</h2>
+    <h2 class="{% if user.is_authenticated and not user|has_group:"redattori" %} mt-5 {% endif %}">Lista prossimi eventi inseriti</h2>
     {% if gestione_eventi_elenco %}
-        <p>Hai inserito {{ gestione_eventi_elenco.count }} eventi.</p>
+        <p>Hai inserito {{ gestione_eventi_elenco.count }} eventi che si devono ancora svolgere.</p>
 
             {% for evento_inserito in gestione_eventi_elenco %}
                 <div class="card mb-3" >
@@ -56,4 +56,40 @@
         <p class="alert alert-warning" role="alert">Nessun evento inserito</p>
     {% endif %}
 
+
+    {% if eventi_inseriti_passati %}
+        <h2 class="mt-5">Lista eventi inseriti passati</h2>
+        <p>Hai inserito {{ eventi_inseriti_passati.count }} eventi ormai scaduti.</p>
+
+            {% for evento_inserito in eventi_inseriti_passati %}
+                <div class="card mb-3" >
+                    <div class="row g-0">
+                        <div class="col-md-2">
+                            {% if evento_inserito.immagine_evento %}
+                                <img src="{{ evento_inserito.immagine_evento.url }}" class="img-fluid rounded-start" alt="">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-10">
+
+                                <div class="card-body">
+                                    <h3 class="card-title" class="h5"><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a>
+                                        {% if evento_inserito.annullato %}
+                                            <p class="badge bg-danger fs-5">Evento annullato!</p>
+                                        {% endif %}
+                                        {% if not evento_inserito.pubblicato %}
+                                            <p class="badge bg-secondary fs-5">Evento non pubblicato!</p>
+                                        {% endif %}
+                                    </h3>
+                                    <p class="card-text">
+                                        {{ evento_inserito.tipo_evento}}<br>
+                                        {{ evento_inserito.data_ora_evento }}<br>
+                                    </p>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+    {% else %}
+        <p class="alert alert-warning" role="alert">Nessun evento inserito</p>
+    {% endif %}
 {% endblock content %}

@@ -31,7 +31,8 @@
 
     <p>
     {% if is_creatore %}
-         <div class="alert alert-primary d-inline-block">
+        <p>Posti disponibili: <span class="badge bg-success">{{ evento.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento.prenotazione_set.count }}</span> {% if evento.prenotazione_set.count > 0 and is_creatore %} (<a href="/eventi/{{ evento.id }}/prenotazioni/">Dettaglio prenotazioni</a>) {% endif %}</p>
+        <div class="alert alert-primary d-inline-block">
             <i class="bi bi-pencil-square"></i> <a href="{% url 'gestione_eventi_modifica' evento.id %}" class="alert-link">Modifica l'evento</a>
         </div>
         {% if  evento.prenotazione_set.count > 0 %}
@@ -50,7 +51,7 @@
         {% endif %}
     {% else %}
         {% if evento.posti_prenotabili > 0 or prenotazione_attiva %}
-            <p>Posti disponibili: <span class="badge bg-success">{{ evento.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento.prenotazione_set.count }}</span> {% if evento.prenotazione_set.count > 0 and is_creatore %} (<a href="/eventi/{{ evento.id }}/prenotazioni/">Dettaglio prenotazioni</a>) {% endif %}</p>
+            <p>Posti disponibili: <span class="badge bg-success">{{ evento.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento.prenotazione_set.count }}</span></p>
             {% if user.is_authenticated and not prenotazione_attiva and not user|has_group:"redattori" and not evento.annullato and evento.data_ora_evento|date:"Y-m-d H:i:s" > ora_attuale %}
                 <form method="post" action="{% url 'prenota_evento' evento.id %}">
                     {% csrf_token %}
@@ -62,7 +63,7 @@
                 <div class="alert alert-light d-inline-block p-2">
                     <p class="m-1"><i class="bi bi-calendar-check"></i> Evento già prenotato</p>
                 </div>
-                <form method="post" action="{% url 'cancella_evento' evento.id %}" class="d-inline-block">
+                <form method="post" action="{% url 'cancella_prenotazione_evento' prenotazione_identificativo %}" class="d-inline-block">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-secondary">
                         <i class="bi bi-trash"></i> Cancella prenotazione

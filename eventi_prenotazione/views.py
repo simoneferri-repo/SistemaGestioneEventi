@@ -44,16 +44,16 @@ class PrenotazioneView(LoginRequiredMixin, View):
 
 class CancellazionePrenotazioneView(LoginRequiredMixin, View):
 
-    def post(self, request, evento_id):
-        evento = get_object_or_404(Eventi, id=evento_id)
-        prenotazione_attiva_server = Prenotazione.objects.filter(utente=request.user, evento=evento).exists()
+    def post(self, request, prenotazione_id):
+        prenotazione = get_object_or_404(Prenotazione, id=prenotazione_id)
+        evento = prenotazione.evento
 
-        if prenotazione_attiva_server:
+        is_proprietario = (prenotazione.utente == request.user)
+        is_redattore = (evento.creatore == request.user)
+
+        if is_proprietario or is_redattore:
             try:
-                elimina_prenotazione = Prenotazione.objects.filter(
-                    utente=request.user,
-                    evento=evento
-                ).delete()
+                prenotazione.delete()
                 evento.posti_prenotabili += 1
                 evento.save()
                 messages.success(request, "<i class='bi bi-info-circle'></i> La prenotazione è stata correttamente cancellata!")
@@ -64,8 +64,6 @@ class CancellazionePrenotazioneView(LoginRequiredMixin, View):
                 print(f"Errore generico: {e}")
                 messages.error(request, f"<i class='bi bi-exclamation-circle'></i> Errore generico: {e}")
         else:
-            messages.error(request, "<i class='bi bi-exclamation-circle'></i> Non ci sono prenotazioni da cancellare.")
+            messages.error(request, "<i class='bi bi-exclamation-circle'></i> Non hai i permessi per cancellare la prenotazione.")
 
         return HttpResponseRedirect(reverse('evento', kwargs={'pk': evento.id}))
-
-# Create your views here.

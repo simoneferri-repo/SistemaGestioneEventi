@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from eventi_gestione.models import Eventi
 from django.contrib.auth.mixins import LoginRequiredMixin
-from eventi_prenotazione.models import Prenotazione, Eventi
+from eventi_prenotazione.models import Prenotazione
 from django.contrib import messages
 from django.utils import timezone
 from django.http import Http404
@@ -123,13 +123,19 @@ class EventDetailView(DetailView):
         #global prenotazione_on
         context = super().get_context_data(**kwargs)
         prenotazione_on = False
+        prenotazione_fatta = None
         if self.request.user.is_authenticated:
             prenotazione_on = Prenotazione.objects.filter(
                 utente=self.request.user,
                 evento=self.get_object()
             ).exists()
+            if prenotazione_on:
+                prenotazione_fatta = Prenotazione.objects.filter(
+                    utente=self.request.user,
+                    evento=self.get_object()
+                ).first().id
         context['prenotazione_attiva'] = prenotazione_on
-
+        context['prenotazione_identificativo'] = prenotazione_fatta
         evento = self.object
         context['is_creatore'] = self.request.user == evento.creatore
 
