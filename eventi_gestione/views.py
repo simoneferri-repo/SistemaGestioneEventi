@@ -88,7 +88,7 @@ class TipologiaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Tipologia
     form_class = GestioneTipologiaForm
     template_name = 'gestione_tipologia.html'
-    success_url = reverse_lazy('tipologie')
+    success_url = reverse_lazy('gestione_tipologia_creazione')
 
     def test_func(self):
         # Controlla se l'utente appartiene al gruppo 'editor'
@@ -108,7 +108,7 @@ class TipologiaUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Tipologia
     form_class = GestioneTipologiaForm
     template_name = 'gestione_tipologia.html'
-    success_url = reverse_lazy('tipologie')
+    success_url = reverse_lazy('gestione_tipologia_creazione')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

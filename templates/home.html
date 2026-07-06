@@ -22,9 +22,9 @@
                             <img src="{{ prenotazione.evento.immagine_evento.url }}" class="card-img-top" alt="">
                         {% endif %}
                         <div class="card-body">
-                            <h3 class="card-title" class="h5"><a href="{% url 'evento' prenotazione.evento.id %}">{{ prenotazione.evento.nome_evento }}</a></h3>
+                            <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' prenotazione.evento.id %}">{{ prenotazione.evento.nome_evento }}</a></h3>
                             <p class="card-text">
-                                {{ prenotazione.evento.tipo_evento}}<br>
+                                <span class="badge rounded-pill text-bg-dark">{{ prenotazione.evento.tipo_evento}}</span><br>
                                 {{ prenotazione.evento.data_ora_evento|date:"d F Y \o\r\e H:i" }}
                             </p>
                         </div>
@@ -42,15 +42,15 @@
                     <img src="{{ evento.immagine_evento.url }}" class="card-img-top" alt="">
                 {% endif %}
                 <div class="card-body">
-                    <h3 class="card-title" class="h5"><a href="{% url 'evento' evento.id %}">{{ evento.nome_evento }}</a></h3>
+                    <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' evento.id %}">{{ evento.nome_evento }}</a></h3>
                     <p class="card-text">
-                        {{ evento.tipo_evento}}<br>
+                        <span class="badge rounded-pill text-bg-dark">{{ evento.tipo_evento}}</span><br>
                         {{ evento.data_ora_evento|date:"d F Y \o\r\e H:i" }}
                         {% if evento.annullato %}
-                            <p class="badge bg-danger fs-5">Evento annullato!</p>
+                            <p class="badge bg-danger fs-6">Evento annullato!</p>
                         {% endif %}
                     {% if evento.id in eventi_prenotati_ids %}
-                        <p class="badge bg-light text-dark fs-5">Evento prenotato</p>
+                        <p class="badge bg-light text-dark fs-6">Evento prenotato</p>
                     {% endif %}
                     </p>
                 </div>

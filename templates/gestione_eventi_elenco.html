@@ -35,7 +35,7 @@
                         <div class="col-md-9">
 
                                 <div class="card-body">
-                                    <h3 class="card-title" class="h5"><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a></h3>
+                                    <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a></h3>
                                     {% if evento_inserito.annullato %}
                                         <p class="badge bg-danger fs-6">Evento annullato!</p>
                                     {% endif %}
@@ -44,7 +44,7 @@
                                     {% endif %}
 
                                     <p class="card-text">
-                                        {{ evento_inserito.tipo_evento}}<br>
+                                        <span class="badge rounded-pill text-bg-dark">{{ evento_inserito.tipo_evento}}</span><br>
                                         {{ evento_inserito.data_ora_evento }}<br>
                                     </p>
                                 </div>
@@ -56,9 +56,8 @@
         <p class="alert alert-warning" role="alert">Nessun evento inserito</p>
     {% endif %}
 
-
+    <h2 class="mt-5">Lista eventi inseriti passati</h2>
     {% if eventi_inseriti_passati %}
-        <h2 class="mt-5">Lista eventi inseriti passati</h2>
         <p>Hai inserito {{ eventi_inseriti_passati.count }} eventi ormai scaduti.</p>
 
             {% for evento_inserito in eventi_inseriti_passati %}
@@ -67,7 +66,7 @@
                         <div class="col-12">
 
                                 <div class="card-body">
-                                    <h3 class="card-title h4" ><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a></h3>
+                                    <h3 class="card-title h4" ><a  class="text-primary-emphasis" href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a></h3>
                                         {% if evento_inserito.annullato %}
                                             <p class="badge bg-danger fs-6 mt-2 mt-md-0">Evento annullato!</p>
                                         {% endif %}
@@ -76,7 +75,7 @@
                                         {% endif %}
 
                                     <p class="card-text">
-                                        {{ evento_inserito.tipo_evento}}<br>
+                                        <span class="badge rounded-pill text-bg-dark">{{ evento_inserito.tipo_evento}}</span><br>
                                         {{ evento_inserito.data_ora_evento }}<br>
                                     </p>
                                 </div>
@@ -85,6 +84,6 @@
                 </div>
             {% endfor %}
     {% else %}
-        <p class="alert alert-warning" role="alert">Nessun evento inserito</p>
+        <p class="alert alert-warning" role="alert">Nessun evento scaduto tra quelli inseriti</p>
     {% endif %}
 {% endblock content %}

@@ -12,22 +12,34 @@
             {% endfor %}
         </div>
     {% endif %}
+    <div class="row mt-5 mb-4">
+        <div class="col-md-8">
+            <h2>{{ evento.nome_evento }}
+                {% if evento.annullato %}
+                    <span class="badge bg-danger fs-6">Evento annullato!</span>
+                {% endif %}
+                {% if not evento.pubblicato %}
+                    <span class="badge bg-secondary fs-6">Evento non pubblicato!</span>
+                {% endif %}
+            </h2>
+            <p>Data: {{ evento.data_ora_evento }}<br>
+            Luogo: {{ evento.luogo_evento}}<br>
+            <span class="badge rounded-pill text-bg-dark">{{ evento.tipo_evento}}</span><br>
+            <p>Descrizione: {{ evento.descrizione_evento }}</p>
+            {% if evento.prezzo > 0 %}
+                 <p>Prezzo: € {{ evento.prezzo }}</p>
+            {% else %}
+                <p>Prezzo: gratuito</p>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            {% if evento.immagine_evento %}
+                <img class="img-fluid" src="{{ evento.immagine_evento.url }}">
+            {% endif %}
+        </div>
+    </div>
 
-    <h2 class="mt-5">{{ evento.nome_evento }}
-        {% if evento.annullato %}
-            <span class="badge bg-danger fs-5">Evento annullato!</span>
-        {% endif %}
-        {% if not evento.pubblicato %}
-            <span class="badge bg-secondary fs-5">Evento non pubblicato!</span>
-        {% endif %}
-    </h2>
-    <p>Data: {{ evento.data_ora_evento }}</p>
-    <p>Luogo: {{ evento.luogo_evento}}</p>
-    <p>Tipologia: {{ evento.tipo_evento}}</p>
-    <p>Descrizione: {{ evento.descrizione_evento }}</p>
-    {% if evento.immagine_evento %}
-        <img src="{{ evento.immagine_evento.url }}">
-    {% endif %}
+
 
     <p>
     {% if is_creatore %}

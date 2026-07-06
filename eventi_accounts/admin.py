@@ -5,9 +5,12 @@ from .models import CustomUser
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
+    list_display = UserAdmin.list_display + ('visualizza_gruppi',)
     fieldsets = UserAdmin.fieldsets + (
         ('Campi Personalizzati', {'fields': ('eta', 'telefono')}),
     )
-    pass
 
+    def visualizza_gruppi(self, obj):
+        gruppo = obj.groups.first()
+        return gruppo.name if gruppo else "-"
 

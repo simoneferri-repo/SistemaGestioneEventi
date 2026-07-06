@@ -9,9 +9,9 @@
                             <img src="{{ evento.immagine_evento.url }}" class="card-img-top" alt="">
                         {% endif %}
                         <div class="card-body">
-                            <h3 class="card-title" class="h5"><a href="{% url 'evento' evento.id %}">{{ evento.nome_evento }}</a></h3>
+                            <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' evento.id %}">{{ evento.nome_evento }}</a></h3>
                             <p class="card-text">
-                                {{ evento.tipo_evento}}<br>
+                                <span class="badge rounded-pill text-bg-dark">{{ evento.tipo_evento}}</span><br>
                                 {{ evento.data_ora_evento|date:"d F Y \o\r\e H:i" }}<br>
                                 {% if evento.annullato %}
                                     <p class="badge bg-danger fs-5">Evento annullato!</p>
@@ -25,4 +25,45 @@
             </div>
         {% endfor %}
     </div>
+    {% if page_obj.has_other_pages %}
+        <nav aria-label="Navigazione pagine" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Precedente">
+                            <span aria-hidden="true">&laquo; Precedente</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo; Precedente</span>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Successiva">
+                            <span aria-hidden="true">Successiva &raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Successiva &raquo;</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
 {% endblock content %}

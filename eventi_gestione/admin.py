@@ -10,6 +10,11 @@ class EventiAdmin(admin.ModelAdmin):
     list_display = ('nome_evento', 'luogo_evento', 'data_semplice', 'tipo_evento', 'posti_prenotabili', 'prenotazioni_attive', 'pubblicato', 'annullato')
     sortable_by = ('nome_evento', 'luogo_evento', 'data_semplice', 'tipo_evento', 'posti_prenotabili', 'pubblicato', 'annullato')
 
+    list_filter = (
+        'tipo_evento',
+        'pubblicato',
+        'annullato',
+    )
     # Definisco come visulizzare la data/orario usando il decoratore @admin.display
     @admin.display(description='Data Evento', ordering='data_ora_evento')
     def data_semplice(self, obj):
