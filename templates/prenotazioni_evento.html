@@ -27,17 +27,20 @@
 
     <h2 class="mt-5">Prenotazioni per l'evento "{{ evento }}"</h2>
     {% if prenotazioni %}
-        <ul class="mt-4">
-        {% for prenotazione in prenotazioni %}
-            <li> Prenotazione di <strong>{{ prenotazione.utente }}</strong> del {{ prenotazione.data_prenotazione|date:"d/m/Y H:i" }}
-                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminaConferma" data-utente-nome="{{ prenotazione.utente }}"
-                data-url-cancellazione="{% url 'cancella_prenotazione_evento' prenotazione.id %}">
-                    <i class="bi bi-trash"></i> Elimina
-                </button>
-            </li>
-        {% endfor %}
-        </ul>
-
+        <div class="row">
+            <div class="col-sm-auto">
+                <ul class="mt-4 list-group">
+                {% for prenotazione in prenotazioni %}
+                    <li class="list-group-item"> Prenotazione di <strong>{{ prenotazione.utente }}</strong> del {{ prenotazione.data_prenotazione|date:"d/m/Y H:i" }}
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminaConferma" data-utente-nome="{{ prenotazione.utente }}"
+                        data-url-cancellazione="{% url 'cancella_prenotazione_evento' prenotazione.id %}">
+                            <i class="bi bi-trash"></i> <span class="visually-hidden">Elimina</span>
+                        </button>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
         <div class="modal fade" id="eliminaConferma" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                  <div class="modal-content">

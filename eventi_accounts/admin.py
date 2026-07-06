@@ -1,5 +1,13 @@
 from django.contrib import admin
-
-# Register your models here.
+from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
-admin.site.register(CustomUser)
+# Register your models here.
+
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + (
+        ('Campi Personalizzati', {'fields': ('eta', 'telefono')}),
+    )
+    pass
+
+

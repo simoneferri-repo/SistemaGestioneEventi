@@ -27,22 +27,22 @@
             {% for evento_inserito in gestione_eventi_elenco %}
                 <div class="card mb-3" >
                     <div class="row g-0">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             {% if evento_inserito.immagine_evento %}
                                 <img src="{{ evento_inserito.immagine_evento.url }}" class="img-fluid rounded-start" alt="">
                             {% endif %}
                         </div>
-                        <div class="col-md-10">
+                        <div class="col-md-9">
 
                                 <div class="card-body">
-                                    <h3 class="card-title" class="h5"><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a>
-                                        {% if evento_inserito.annullato %}
-                                            <p class="badge bg-danger fs-5">Evento annullato!</p>
-                                        {% endif %}
-                                        {% if not evento_inserito.pubblicato %}
-                                            <p class="badge bg-secondary fs-5">Evento non pubblicato!</p>
-                                        {% endif %}
-                                    </h3>
+                                    <h3 class="card-title" class="h5"><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a></h3>
+                                    {% if evento_inserito.annullato %}
+                                        <p class="badge bg-danger fs-6">Evento annullato!</p>
+                                    {% endif %}
+                                    {% if not evento_inserito.pubblicato %}
+                                        <p class="badge bg-secondary fs-6">Evento non pubblicato!</p>
+                                    {% endif %}
+
                                     <p class="card-text">
                                         {{ evento_inserito.tipo_evento}}<br>
                                         {{ evento_inserito.data_ora_evento }}<br>
@@ -64,22 +64,17 @@
             {% for evento_inserito in eventi_inseriti_passati %}
                 <div class="card mb-3" >
                     <div class="row g-0">
-                        <div class="col-md-2">
-                            {% if evento_inserito.immagine_evento %}
-                                <img src="{{ evento_inserito.immagine_evento.url }}" class="img-fluid rounded-start" alt="">
-                            {% endif %}
-                        </div>
-                        <div class="col-md-10">
+                        <div class="col-12">
 
                                 <div class="card-body">
-                                    <h3 class="card-title" class="h5"><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a>
+                                    <h3 class="card-title h4" ><a href="{% url 'evento' evento_inserito.id %}">{{ evento_inserito.nome_evento }}</a></h3>
                                         {% if evento_inserito.annullato %}
-                                            <p class="badge bg-danger fs-5">Evento annullato!</p>
+                                            <p class="badge bg-danger fs-6 mt-2 mt-md-0">Evento annullato!</p>
                                         {% endif %}
                                         {% if not evento_inserito.pubblicato %}
-                                            <p class="badge bg-secondary fs-5">Evento non pubblicato!</p>
+                                            <p class="badge bg-secondary fs-6 mt-2 mt-md-0">Evento non pubblicato!</p>
                                         {% endif %}
-                                    </h3>
+
                                     <p class="card-text">
                                         {{ evento_inserito.tipo_evento}}<br>
                                         {{ evento_inserito.data_ora_evento }}<br>

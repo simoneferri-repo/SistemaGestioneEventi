@@ -7,21 +7,24 @@
             <h3 class="mb-3">Tipologie già inserite</h3>
 
             {% if tipologie_esistenti %}
-                <ul class="list-group">
-                    {% for tipo in tipologie_esistenti %}
-                        <li class="list-group-item d-flex align-middle">
-                            <p class="h5">
-                                {{ tipo.nome_tipo }}
-                                {% if tipo.creatore == user %}
-                                    <a href="{% url 'gestione_tipologia_modifica' tipo.id %}" class="btn btn-primary btn-sm" role="button"><i class="bi bi-pencil-square"></i> <span class="visually-hidden">Modifica</span></a>
-                                {% else %}
-                                    <em class="h6 fw-normal"><small>( <i class="bi bi-person-circle " title="creatore" aria-label="creata da"></i> {{ tipo.creatore.username }} )</small></em>
-                                {% endif %}
-                            </p>
-                        </li>
-                    {% endfor %}
-                </ul>
-
+                <div class="row">
+                    <div class="col-sm-auto">
+                        <ul class="list-group">
+                            {% for tipo in tipologie_esistenti %}
+                                <li class="list-group-item d-flex align-middle">
+                                    <p class="h5">
+                                        {{ tipo.nome_tipo }}
+                                        {% if tipo.creatore == user %}
+                                            <a href="{% url 'gestione_tipologia_modifica' tipo.id %}" class="btn btn-white btn-sm" role="button"><i class="bi bi-pencil-square"></i> <span class="visually-hidden">Modifica</span></a>
+                                        {% else %}
+                                            <em class="h6 fw-normal"><small>( <i class="bi bi-person-circle " title="creatore" aria-label="creata da"></i> {{ tipo.creatore.username }} )</small></em>
+                                        {% endif %}
+                                    </p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
                 {% else %}
                 <p class="text-muted italic">Non è ancora stata inserita nessuna tipologia.</p>
             {% endif %}
