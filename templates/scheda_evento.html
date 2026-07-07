@@ -12,9 +12,9 @@
             {% endfor %}
         </div>
     {% endif %}
-    <div class="row mt-5 mb-4">
+    <div class="row mt-5 mb-4 border-bottom border-light-subtle pb-3">
         <div class="col-md-8">
-            <h2>{{ evento.nome_evento }}
+            <h2 class="border-bottom  border-2 border-warning-subtle pb-2">{{ evento.nome_evento }}
                 {% if evento.annullato %}
                     <span class="badge bg-danger fs-6">Evento annullato!</span>
                 {% endif %}
@@ -22,15 +22,15 @@
                     <span class="badge bg-secondary fs-6">Evento non pubblicato!</span>
                 {% endif %}
             </h2>
-            <p>Data: {{ evento.data_ora_evento }}<br>
-                Luogo: {{ evento.luogo_evento}}<br>
+            <p class="border-bottom border-light-subtle pb-3"><i class="bi bi-calendar"></i> <strong>Data:</strong>  {{ evento.data_ora_evento }}<br>
+                <i class="bi bi-signpost"></i><strong>Luogo:</strong>  {{ evento.luogo_evento}}<br>
                 {% for tipologia in evento.tipo_evento.all %}
-                    <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
+                    <span class="badge rounded-pill text-bg-dark mt-2">{{ tipologia.nome_tipo }}</span>
                 {% endfor %}
             </p>
             <p>Descrizione: {{ evento.descrizione_evento }}</p>
             {% if evento.prezzo > 0 %}
-                 <p>Prezzo: € {{ evento.prezzo }}</p>
+                <p><i class="bi bi-cash"></i> <strong>Prezzo</strong>: € {{ evento.prezzo }}</p>
             {% else %}
                 <p>Prezzo: gratuito</p>
             {% endif %}

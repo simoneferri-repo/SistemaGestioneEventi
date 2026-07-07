@@ -112,8 +112,8 @@ class GestioneTipologiaForm(ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.layout = Layout(
-            Column(creatore_html, css_class='col-md-4'),
-            Field('nome_tipo', placeholder='Nome tipologia'),
+            Column(creatore_html, css_class='col-md-6'),
+            Column( Field('nome_tipo', placeholder='Nome tipologia'), css_class='col-md-6'),
             Submit('submit', 'Salva', css_class='btn btn-primary mt-2'),
         )
 
