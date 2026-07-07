@@ -1,6 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2 class="mt-5 mb-4">Tutti gli eventi in programma</h2>
+
+    <h2 class="mt-5 mb-4">
+        {% if not tipologia_selezionata %}
+            Tutti gli eventi in programma
+        {% else %}
+            Tutti gli eventi in programma per la tipologia "{{ tipologia_corrente.nome_tipo }}"
+        {% endif %}
+    </h2>
+    <div class="mb-4 pb-4 border-bottom">
+        <p class="h5">Filtra per tipo evento</p>
+        <span {% if not tipologia_selezionata %}class="badge rounded-pill text-bg-light"  aria-current="page"{% else %}class="badge rounded-pill text-bg-dark"{% endif %}>
+            <a href="{% url 'eventi' %}" {% if not tipologia_selezionata %}class="text-bg-light link-underline link-underline-opacity-0"  aria-current="page"{% else %}class="text-bg-dark link-underline link-underline-opacity-0"{% endif %}>
+                Tutti le tipologie
+            </a>
+        </span>
+        {% for tipo in tipologie %}
+            <span {% if tipologia_selezionata == tipo.id|slugify %}class="badge rounded-pill text-bg-light"  aria-current="page"{% else %}class="badge rounded-pill text-bg-dark"{% endif %}>
+                <a href="{% url 'eventi' %}?tipologia={{ tipo.id }}"  {% if tipologia_selezionata == tipo.id|slugify %}class="text-bg-light link-underline link-underline-opacity-0"  aria-current="page"{% else %}class="text-bg-dark link-underline link-underline-opacity-0"{% endif %}>
+                    {{ tipo.nome_tipo }}
+                </a>
+            </span>
+        {% endfor %}
+    </div>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for evento in eventi_futuri %}
             <div class="col">
@@ -11,7 +33,10 @@
                         <div class="card-body">
                             <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' evento.id %}">{{ evento.nome_evento }}</a></h3>
                             <p class="card-text">
-                                <span class="badge rounded-pill text-bg-dark">{{ evento.tipo_evento}}</span><br>
+                                {% for tipologia in evento.tipo_evento.all %}
+                                    <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
+                                {% endfor %}
+                                <br>
                                 {{ evento.data_ora_evento|date:"d F Y \o\r\e H:i" }}<br>
                                 {% if evento.annullato %}
                                     <p class="badge bg-danger fs-5">Evento annullato!</p>

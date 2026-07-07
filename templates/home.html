@@ -17,8 +17,8 @@
         ai concerti, dalle competizioni sportive alle visite guidate e alle escursioni nella natura.
         Scopri cosa puoi fare, pianifica la tua agenda e prenota subito i tuoi eventi prferiti.</p>
     {% if prenotazioni_attive %}
-        <h2 class="mb-4">I prossimi {{ prenotazioni_attive|length }} eventi che hai prenotato</h2>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <h2 class="mb-4">I prossimi {{ prenotazioni_attive|length }} eventi che hai prenotato <i class="bi bi-bookmark-check"></i></h2>
+        <div class="row row-cols-1 row-cols-md-4 g-4 pb-4 border-bottom border-4 border-warning-subtle">
             {% for prenotazione in prenotazioni_attive %}
                 <div class="col">
                     <div class="card h-100">
@@ -28,7 +28,10 @@
                         <div class="card-body">
                             <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' prenotazione.evento.id %}">{{ prenotazione.evento.nome_evento }}</a></h3>
                             <p class="card-text">
-                                <span class="badge rounded-pill text-bg-dark">{{ prenotazione.evento.tipo_evento}}</span><br>
+                                {% for tipologia in prenotazione.evento.tipo_evento.all %}
+                                    <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
+                                {% endfor %}
+                                <br>
                                 {{ prenotazione.evento.data_ora_evento|date:"d F Y \o\r\e H:i" }}
                             </p>
                         </div>
@@ -37,7 +40,7 @@
             {% endfor %}
         </div>
     {% endif %}
-    <h2 class="mt-5 mb-4">I prossimi 6 eventi in progamma</h2>
+    <h2 class="{% if not prenotazioni_attive %}mt-5{% else %}mt-3{% endif %} mb-4">I prossimi 6 eventi in progamma</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for evento in eventi_prossimi %}
         <div class="col">
@@ -48,7 +51,10 @@
                 <div class="card-body">
                     <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' evento.id %}">{{ evento.nome_evento }}</a></h3>
                     <p class="card-text">
-                        <span class="badge rounded-pill text-bg-dark">{{ evento.tipo_evento}}</span><br>
+                        {% for tipologia in evento.tipo_evento.all %}
+                            <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
+                        {% endfor %}
+                        <br>
                         {{ evento.data_ora_evento|date:"d F Y \o\r\e H:i" }}
                         {% if evento.annullato %}
                             <p class="badge bg-danger fs-6">Evento annullato!</p>

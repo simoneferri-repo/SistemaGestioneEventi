@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, ListView, DetailView
-from eventi_gestione.models import Eventi
+from eventi_gestione.models import Eventi, Tipologia
 from django.contrib.auth.mixins import LoginRequiredMixin
 from eventi_prenotazione.models import Prenotazione
 from django.contrib import messages
@@ -28,7 +28,7 @@ class HomePageView(TemplateView):
             context['prenotazioni_attive'] = Prenotazione.objects.filter(
                 utente=self.request.user,
                 evento__annullato=False
-            ).order_by('evento__data_ora_evento')[:3]
+            ).order_by('evento__data_ora_evento')[:4]
             context['eventi_prenotati_ids'] = set(
                 Prenotazione.objects.filter(utente=self.request.user).values_list('evento_id', flat=True)
             )
@@ -53,10 +53,20 @@ class EventListView(ListView):
 
     def get_queryset(self):
         ora_attuale = timezone.now()
-        return Eventi.objects.filter(
+        queryset = Eventi.objects.filter(
             data_ora_evento__gte=ora_attuale,
             pubblicato=True
         ).order_by('data_ora_evento')
+       # return Eventi.objects.filter(
+       #     data_ora_evento__gte=ora_attuale,
+       #     pubblicato=True
+        #).order_by('data_ora_evento')
+
+        tipologia_id = self.request.GET.get('tipologia')
+
+        if tipologia_id:
+            queryset = queryset.filter(tipo_evento__id=tipologia_id).distinct()
+        return queryset
 
     def get_context_data(self, **kwargs):
         #ora_attuale = timezone.now()
@@ -67,6 +77,14 @@ class EventListView(ListView):
             context['eventi_prenotati_ids'] = set(
                 Prenotazione.objects.filter(utente=self.request.user).values_list('evento_id', flat=True)
             )
+        context['tipologie'] = Tipologia.objects.all()
+        context['tipologia_selezionata'] = self.request.GET.get('tipologia')
+
+        if context['tipologia_selezionata']:
+            try:
+                context['tipologia_corrente'] = Tipologia.objects.get(id=context['tipologia_selezionata'])
+            except Tipologia.DoesNotExist:
+                context['tipologia_corrente'] = None
 
         return context
 class UserEventListView(LoginRequiredMixin,ListView):

@@ -10,7 +10,7 @@
             {% endfor %}
         </div>
     {% endif %}
-    <h2 class="mt-5">Lista dei prossimi eventi prenotati</h2>
+    <h2 class="mt-5">Lista dei prossimi eventi prenotati <i class="bi bi-bookmark-check"></i></h2>
 
     {% if prenotazioni_utente %}
         <p>Ci sono {{ prenotazioni_utente.count }} prenotazioni attive.</p>
@@ -24,7 +24,10 @@
                             <div class="card-body">
                                 <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' prenotato.evento.id %}">{{ prenotato.evento.nome_evento }}</a></h3>
                                 <p class="card-text">
-                                    <span class="badge rounded-pill text-bg-dark">{{ prenotato.evento.tipo_evento}}</span><br>
+                                    {% for tipologia in prenotato.evento.tipo_evento.all %}
+                                        <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
+                                    {% endfor %}
+                                    <br>
                                     {{ prenotato.evento.data_ora_evento }}<br>
                                 </p>
                             </div>
@@ -49,7 +52,10 @@
                                 <div class="card-body">
                                     <h3 class="card-title h4" ><a  class="text-primary-emphasis" href="{% url 'evento' prenotato_old.evento.id %}">{{ prenotato_old.evento.nome_evento }}</a></h3>
                                     <p class="card-text">
-                                        <span class="badge rounded-pill text-bg-dark">{{ prenotato_old.evento.tipo_evento}}</span><br>
+                                        {% for tipologia in prenotato_old.evento.tipo_evento.all %}
+                                            <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
+                                        {% endfor %}
+                                        <br>
                                         {{ prenotato_old.evento.data_ora_evento }}<br>
                                     </p>
                                 </div>

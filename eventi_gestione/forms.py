@@ -28,6 +28,13 @@ class GestioneEventiForm(ModelForm):
         model = Eventi
         fields = ['nome_evento', 'descrizione_evento', 'tipo_evento', 'luogo_evento', 'data_ora_evento', 'immagine_evento', 'prezzo', 'posti_prenotabili', 'annullato', 'pubblicato']
 
+    def clean_tipo_evento(self):
+        tipologie = self.cleaned_data.get('tipo_evento')
+
+        if not tipologie:
+            raise forms.ValidationError("Devi selezionare almeno una tipologia per l'evento.")
+
+        return tipologie
 
     def __init__(self, *args, **kwargs):
         current_user = kwargs.pop('user', None)
@@ -109,3 +116,14 @@ class GestioneTipologiaForm(ModelForm):
             Field('nome_tipo', placeholder='Nome tipologia'),
             Submit('submit', 'Salva', css_class='btn btn-primary mt-2'),
         )
+
+class EventiAdminForm(forms.ModelForm):
+    class Meta:
+        model = Eventi
+        fields = '__all__'
+
+    def clean_tipo_evento(self):
+        tipologie = self.cleaned_data.get('tipo_evento')
+        if not tipologie or tipologie.count() == 0:
+            raise forms.ValidationError("Attenzione: seleziona almeno una tipologia.")
+        return tipologie

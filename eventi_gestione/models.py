@@ -16,7 +16,8 @@ class Tipologia(models.Model):
 class Eventi(models.Model):
     nome_evento = models.CharField(max_length=100)
     descrizione_evento = models.TextField()
-    tipo_evento = models.ForeignKey(Tipologia,on_delete=models.CASCADE)
+    tipo_evento = models.ManyToManyField(Tipologia, related_name='eventi')
+    # tipo_evento = models.ForeignKey(Tipologia,on_delete=models.CASCADE)
     luogo_evento = models.CharField(max_length=100)
     data_ora_evento = models.DateTimeField()
     immagine_evento = models.ImageField(upload_to='eventi/', blank=True)

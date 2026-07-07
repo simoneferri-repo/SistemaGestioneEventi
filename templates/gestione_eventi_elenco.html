@@ -45,7 +45,10 @@
                                     {% endif %}
 
                                     <p class="card-text">
-                                        <span class="badge rounded-pill text-bg-dark">{{ evento_inserito.tipo_evento}}</span><br>
+                                        {% for tipologia in evento_inserito.tipo_evento.all %}
+                                            <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
+                                        {% endfor %}
+                                        <br>
                                         {{ evento_inserito.data_ora_evento }}<br>
                                         <p>Posti disponibili: <span class="badge bg-success">{{ evento_inserito.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento_inserito.prenotazione_set.count }}</span> {% if evento.prenotazione_set.count > 0 and is_creatore %} (<a href="/eventi/{{ evento.id }}/prenotazioni/">Dettaglio prenotazioni</a>) {% endif %}</p>
                                     </p>
@@ -77,7 +80,10 @@
                                         {% endif %}
 
                                     <p class="card-text">
-                                        <span class="badge rounded-pill text-bg-dark">{{ evento_inserito.tipo_evento}}</span><br>
+                                        {% for tipologia in evento_inserito.tipo_evento.all %}
+                                            <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
+                                        {% endfor %}
+                                        <br>
                                         {{ evento_inserito.data_ora_evento }}<br>
                                     </p>
                                 </div>

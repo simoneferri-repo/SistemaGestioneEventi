@@ -23,8 +23,11 @@
                 {% endif %}
             </h2>
             <p>Data: {{ evento.data_ora_evento }}<br>
-            Luogo: {{ evento.luogo_evento}}<br>
-            <span class="badge rounded-pill text-bg-dark">{{ evento.tipo_evento}}</span><br>
+                Luogo: {{ evento.luogo_evento}}<br>
+                {% for tipologia in evento.tipo_evento.all %}
+                    <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
+                {% endfor %}
+            </p>
             <p>Descrizione: {{ evento.descrizione_evento }}</p>
             {% if evento.prezzo > 0 %}
                  <p>Prezzo: € {{ evento.prezzo }}</p>
