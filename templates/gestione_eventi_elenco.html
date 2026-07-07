@@ -20,7 +20,8 @@
             </div>
         </nav>
     {% endif %}
-    <h2 class="{% if user.is_authenticated and not user|has_group:"redattori" %} mt-5 {% endif %}">Lista prossimi eventi inseriti</h2>
+    <h2 class="{% if user.is_authenticated and not user|has_group:"redattori" %} mt-5 {% endif %}">Pannello di gestione dei tuoi eventi</h2>
+    <h3 class="h4 mt-3">Lista prossimi eventi inseriti</h3>
     {% if gestione_eventi_elenco %}
         <p>Hai inserito {{ gestione_eventi_elenco.count }} eventi che si devono ancora svolgere.</p>
 
@@ -46,6 +47,7 @@
                                     <p class="card-text">
                                         <span class="badge rounded-pill text-bg-dark">{{ evento_inserito.tipo_evento}}</span><br>
                                         {{ evento_inserito.data_ora_evento }}<br>
+                                        <p>Posti disponibili: <span class="badge bg-success">{{ evento_inserito.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento_inserito.prenotazione_set.count }}</span> {% if evento.prenotazione_set.count > 0 and is_creatore %} (<a href="/eventi/{{ evento.id }}/prenotazioni/">Dettaglio prenotazioni</a>) {% endif %}</p>
                                     </p>
                                 </div>
                         </div>
@@ -56,7 +58,7 @@
         <p class="alert alert-warning" role="alert">Nessun evento inserito</p>
     {% endif %}
 
-    <h2 class="mt-5">Lista eventi inseriti passati</h2>
+    <h3 class="mt-5 h4">Lista eventi inseriti passati</h3>
     {% if eventi_inseriti_passati %}
         <p>Hai inserito {{ eventi_inseriti_passati.count }} eventi ormai scaduti.</p>
 

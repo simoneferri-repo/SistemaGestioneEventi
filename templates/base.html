@@ -1,5 +1,5 @@
 {% load auth_extras %}
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="it">
     <head>
@@ -11,38 +11,31 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <link  rel="stylesheet"  href="{% static 'css/style.css' %}" type="text/css"  />
     </head>
 
     <body class="container d-flex flex-column min-vh-100">
         <header>
+            <div class="header_img"></div>
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
               <div class="container-fluid">
-                  <a class="navbar-brand" href="/"><h1>Eventi a Prato</h1></a>
+                  <h1 class="visually-hidden">Eventi a Prato</h1>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarText">
-                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0 f5">
+
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        <a {% if request.resolver_match.url_name == 'home' %}class="nav-link active" aria-current="page"{% else %}class="nav-link"{% endif %} href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="/eventi">Eventi</a>
+                      <a  {% if request.resolver_match.url_name == 'eventi' %}class="nav-link active" aria-current="page"{% else %}class="nav-link"{% endif %} href="/eventi">Tutti gli eventi</a>
                     </li>
                     {% if user.is_authenticated and user|has_group:"visitatori" %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/eventi_prenotati/">Eventi prenotati</a>
+                            <a {% if request.resolver_match.url_name == 'eventi_prenotati' %}class="nav-link active" aria-current="page"{% else %}class="nav-link"{% endif %} href="/eventi_prenotati/">Eventi prenotati</a>
                         </li>
-                    {% elif user|has_group:"redattori" %}
-                     <!--    <li class="nav-item">
-                            <a class="nav-link" href="/eventi_inseriti/">Gestione eventi</a>
-                        </li>
-                        <li class="nav-item">
-                         <a href="/gestione_eventi/" class="btn btn-primary btn-sm" role="button"><i class="bi bi-calendar-plus"></i> Aggiungi evento</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/gestione_tipologia/" class="btn btn-primary btn-sm ms-lg-2" role="button"><i class="bi bi-plus-square"></i> Aggiungi tipologia</a>
-                        </li> -->
                     {% endif %}
                   </ul>
                   <span class="navbar-text">
@@ -94,7 +87,7 @@
           {% endblock content %}
         </div>
         </main>
-        <footer class="bg-secondary text-white text-center p-2 mt-5 ">
+        <footer class="text-black text-center p-2 mt-5 ">
             © Copyright Simone Ferri
         </footer>
     </body>

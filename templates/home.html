@@ -12,8 +12,12 @@
             {% endfor %}
         </div>
     {% endif %}
+    <p class="mt-5">La piattaforma di riferimento per la cultura e il divertimento a Prato.
+        Un unico spazio dove trovare i migliori eventi del territorio: dalle performance teatrali
+        ai concerti, dalle competizioni sportive alle visite guidate e alle escursioni nella natura.
+        Scopri cosa puoi fare, pianifica la tua agenda e prenota subito i tuoi eventi prferiti.</p>
     {% if prenotazioni_attive %}
-        <h2 class="mt-5">I prossimi {{ prenotazioni_attive|length }} eventi prenotati</h2>
+        <h2 class="mb-4">I prossimi {{ prenotazioni_attive|length }} eventi che hai prenotato</h2>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for prenotazione in prenotazioni_attive %}
                 <div class="col">
@@ -33,7 +37,7 @@
             {% endfor %}
         </div>
     {% endif %}
-    <h2 class="mt-5">I prossimi 6 eventi in progamma</h2>
+    <h2 class="mt-5 mb-4">I prossimi 6 eventi in progamma</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for evento in eventi_prossimi %}
         <div class="col">

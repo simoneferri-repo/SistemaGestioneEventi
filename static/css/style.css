@@ -1,0 +1,16 @@
+.header_img {
+    background-image: url('../img/testata-eventi.jpg');
+    background-size: cover;
+    height: 250px;
+}
+a.active {
+    font-weight: bold;
+}
+footer {
+    background-color: #d8bc94;
+}
+@media screen and (max-width: 991px) {
+    .header_img {
+        height: 110px;
+    }
+}

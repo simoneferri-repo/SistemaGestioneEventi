@@ -40,20 +40,20 @@
 
     {% if prenotazioni_passate %}
         <p>Ci sono {{ prenotazioni_passate.count }} prenotazioni passate.</p>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="row g-4">
             {% for prenotato_old in prenotazioni_passate %}
-                <div class="col">
-                    <div class="card h-100">
-                            {% if prenotato_old.evento.immagine_evento %}
-                                <img src="{{ prenotato_old.evento.immagine_evento.url }}" class="card-img-top" alt="">
-                            {% endif %}
-                            <div class="card-body">
-                                <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' prenotato_old.evento.id %}">{{ prenotato_old.evento.nome_evento }}</a></h3>
-                                <p class="card-text">
-                                    <span class="badge rounded-pill text-bg-dark">{{ prenotato_old.evento.tipo_evento}}</span><br>
-                                    {{ prenotato_old.evento.data_ora_evento }}<br>
-                                </p>
-                            </div>
+                <div class="card mb-3" >
+                    <div class="row g-0">
+                        <div class="col-12">
+
+                                <div class="card-body">
+                                    <h3 class="card-title h4" ><a  class="text-primary-emphasis" href="{% url 'evento' prenotato_old.evento.id %}">{{ prenotato_old.evento.nome_evento }}</a></h3>
+                                    <p class="card-text">
+                                        <span class="badge rounded-pill text-bg-dark">{{ prenotato_old.evento.tipo_evento}}</span><br>
+                                        {{ prenotato_old.evento.data_ora_evento }}<br>
+                                    </p>
+                                </div>
+                        </div>
                     </div>
                 </div>
             {% endfor %}

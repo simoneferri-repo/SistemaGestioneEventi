@@ -58,7 +58,7 @@
         {% endif %}
         {% if evento.data_ora_evento|date:"Y-m-d H:i:s" > ora_attuale %}
             <div class="alert alert-secondary">
-                <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
+                <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> e prenota subito questo evento.
             </div>
         {% endif %}
     {% else %}
@@ -83,7 +83,7 @@
                 </form>
             {% elif not evento.annullato and evento.data_ora_evento|date:"Y-m-d H:i:s" > ora_attuale %}
                  <div class="alert alert-warning d-inline-block">
-                    <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> per poter prenotare questo evento.
+                    <i class="bi bi-box-arrow-in-right"></i> <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">Accedi</a> e prenota subito questo evento.
                 </div>
             {% endif %}
         {% elif not evento.annullato and evento.data_ora_evento|date:"Y-m-d H:i:s" > ora_attuale %}
