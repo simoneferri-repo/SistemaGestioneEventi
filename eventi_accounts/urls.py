@@ -7,6 +7,8 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path("signup/", SignUpView.as_view(), name="signup"),
     path('profilo/edit/', EditUserView.as_view(), name='modifica_profilo'),
+
+    # Gestione del cambio password sfruttando le potenzialità di PasswordChangeView
     path(
         'profilo/cambia-password/',
         auth_views.PasswordChangeView.as_view(
@@ -16,7 +18,6 @@ urlpatterns = [
         name='password_change'
     ),
 
-    # 2. Pagina di conferma successo
     path(
         'profilo/cambia-password/fatto/',
         auth_views.PasswordChangeDoneView.as_view(

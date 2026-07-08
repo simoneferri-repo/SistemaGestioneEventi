@@ -9,6 +9,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         ('Campi Personalizzati', {'fields': ('eta', 'telefono')}),
     )
+# codice per visualizzare il gruppo dell'utente nella gestione utente in admin
 
     def visualizza_gruppi(self, obj):
         gruppo = obj.groups.first()

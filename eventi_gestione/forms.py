@@ -17,17 +17,11 @@ class GestioneEventiForm(ModelForm):
         label="Data e ora dell'evento"
     )
 
-#    data_ora_evento = forms.DateTimeField(
-#        input_formats=['%d/%m/%Y %H:%M'],
-#        widget=forms.DateTimeInput(
-#            format='%d/%m/%Y %H:%M',
-#            attrs={'placeholder': 'gg/mm/aaaa hh:mm'}
-#        )
-#    )
     class Meta:
         model = Eventi
         fields = ['nome_evento', 'descrizione_evento', 'tipo_evento', 'luogo_evento', 'data_ora_evento', 'immagine_evento', 'prezzo', 'posti_prenotabili', 'annullato', 'pubblicato']
 
+# Verifico che venga selezionato almeno una tipologia per l'evento
     def clean_tipo_evento(self):
         tipologie = self.cleaned_data.get('tipo_evento')
 
@@ -40,6 +34,7 @@ class GestioneEventiForm(ModelForm):
         current_user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
+        # Visualizzo il nome del creatore in modifica dell'evento
         if self.instance and self.instance.pk and getattr(self.instance, 'creatore', None):
             creatore_html = HTML(f'''
                         <div class="mb-3">
@@ -96,6 +91,7 @@ class GestioneTipologiaForm(ModelForm):
         current_user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
+        # Visualizzo il nome del creatore in modifica della tipologia
         if self.instance and self.instance.pk and getattr(self.instance, 'creatore', None):
             creatore_html = HTML(f'''
                         <div class="mb-3">
@@ -117,6 +113,7 @@ class GestioneTipologiaForm(ModelForm):
             Submit('submit', 'Salva', css_class='btn btn-primary mt-2'),
         )
 
+# controllo che venga selezionato lamno una tipologia per l'evento
 class EventiAdminForm(forms.ModelForm):
     class Meta:
         model = Eventi

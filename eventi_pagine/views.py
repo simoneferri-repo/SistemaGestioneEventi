@@ -19,12 +19,13 @@ class HomePageView(TemplateView):
 
 
         if self.request.user.is_authenticated:
-
+            # Verifico se esistono prenotazioni annullate
             prenotazioni_annullate = Prenotazione.objects.filter(
                 utente=self.request.user,
                 evento__annullato=True,
                 evento__data_ora_evento__gte=timezone.now()
             )
+            # Estraggo le prossime 4 prenotazioni dell'utente
             context['prenotazioni_attive'] = Prenotazione.objects.filter(
                 utente=self.request.user,
                 evento__annullato=False
@@ -33,6 +34,7 @@ class HomePageView(TemplateView):
                 Prenotazione.objects.filter(utente=self.request.user).values_list('evento_id', flat=True)
             )
 
+            # Visualizzo un messaggio se ci sono prenotazioni attive su eventi annullati
             if prenotazioni_annullate.exists():
                 testo_msg_annullato = "<i class='fs-4 bi bi-exclamation-triangle'></i> Uno o più eventi a cui eri prenotato sono stati annullati <i class='fs-4 bi bi-exclamation-triangle'></i> <ul>"
 
@@ -57,11 +59,8 @@ class EventListView(ListView):
             data_ora_evento__gte=ora_attuale,
             pubblicato=True
         ).order_by('data_ora_evento')
-       # return Eventi.objects.filter(
-       #     data_ora_evento__gte=ora_attuale,
-       #     pubblicato=True
-        #).order_by('data_ora_evento')
 
+        # Gestisco i filtri per tipologia
         tipologia_id = self.request.GET.get('tipologia')
 
         if tipologia_id:
@@ -77,6 +76,8 @@ class EventListView(ListView):
             context['eventi_prenotati_ids'] = set(
                 Prenotazione.objects.filter(utente=self.request.user).values_list('evento_id', flat=True)
             )
+
+        # Gestisco i filtri per tipologia
         context['tipologie'] = Tipologia.objects.all()
         context['tipologia_selezionata'] = self.request.GET.get('tipologia')
 
@@ -106,7 +107,7 @@ class UserEventListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
                 evento__annullato=True,
                 evento__data_ora_evento__gte = timezone.now()
             )
-
+            # Faccio apparire un messaggio se ci sono prenotazioni attive su eventi annullati
             if prenotazioni_annullate.exists():
                 testo_msg_annullato = "<i class='fs-4 bi bi-exclamation-triangle'></i> Uno o più eventi a cui eri prenotato sono stati annullati <i class='fs-4 bi bi-exclamation-triangle'></i> <ul>"
 
@@ -117,6 +118,7 @@ class UserEventListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
                 messages.error(self.request,testo_msg_annullato)
 
+        # Contesto per visualizzare le prenotazioni passate
         context['prenotazioni_passate'] = Prenotazione.objects.filter(utente=self.request.user,evento__data_ora_evento__lt = timezone.now()).select_related('evento').order_by('-evento__data_ora_evento')
 
         return context
@@ -132,6 +134,7 @@ class EventDetailView(DetailView):
     def render_to_response(self, context, **response_kwargs):
         evento = self.object
 
+        # Faccio apparire un avviso e rendo un codice http 404 se l'evento è scaduto
         if evento.data_ora_evento < timezone.now():
             response_kwargs['status'] = 404
             messages.error(self.request,
@@ -148,6 +151,8 @@ class EventDetailView(DetailView):
                 raise Http404("Evento non pubblicato")
 
         return obj
+
+    # Definisco il contesto per intercettare se l'evento è già prenotato e se l'utente è il creatore
     def get_context_data(self, **kwargs):
         #global prenotazione_on
         context = super().get_context_data(**kwargs)
@@ -181,6 +186,7 @@ class EditorEventListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Contesto per visualizzare gli eventi inseriti passati
         context['eventi_inseriti_passati'] = Eventi.objects.filter(creatore=self.request.user,data_ora_evento__lt = timezone.now()).order_by('data_ora_evento')
 
         return context

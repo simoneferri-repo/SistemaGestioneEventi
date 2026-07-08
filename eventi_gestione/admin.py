@@ -43,6 +43,7 @@ class TipologiaAdmin(admin.ModelAdmin):
     list_display = ('nome_tipo', 'n_eventi')
     sortable_by = ('nome_tipo',)
 
+# Visualizzo il nummero di eventi collegati ad ogni tipologia
     @admin.display(description='Eventi')
     def n_eventi(self, obj):
         return obj.eventi.count()

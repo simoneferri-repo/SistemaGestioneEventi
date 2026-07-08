@@ -3,6 +3,8 @@ from eventi_gestione.models import Eventi
 from eventi_accounts.models import CustomUser
 
 class Prenotazione(models.Model):
+
+   # Lo stato inizialmente è stato inserito come campo della prenotazione ma non è stato usato
     STATI_PRENOTAZIONE = [
         ('ATTIVA', 'Attiva'),
         ('CANCELLATA', 'Cancellata'),
