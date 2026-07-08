@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from eventi_gestione.models import Eventi, Tipologia
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from eventi_prenotazione.models import Prenotazione
 from django.contrib import messages
 from django.utils import timezone
@@ -87,10 +87,14 @@ class EventListView(ListView):
                 context['tipologia_corrente'] = None
 
         return context
-class UserEventListView(LoginRequiredMixin,ListView):
+class UserEventListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Prenotazione
     template_name = "prenotazioni_utente.html"
     context_object_name = 'prenotazioni_utente'
+
+    def test_func(self):
+        # Controlla se l'utente appartiene al gruppo 'visitatori'
+        return self.request.user.groups.filter(name='visitatori').exists()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -166,7 +170,7 @@ class EventDetailView(DetailView):
 
         return context
 
-class EditorEventListView(LoginRequiredMixin, ListView):
+class EditorEventListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Eventi
     template_name = 'gestione_eventi_elenco.html'
     context_object_name = 'gestione_eventi_elenco'
@@ -181,7 +185,11 @@ class EditorEventListView(LoginRequiredMixin, ListView):
 
         return context
 
-class EventPrenotazioniListView(ListView):
+    def test_func(self):
+        # Controlla se l'utente appartiene al gruppo 'redattori'
+        return self.request.user.groups.filter(name='redattori').exists()
+
+class EventPrenotazioniListView(UserPassesTestMixin, ListView):
     model = Prenotazione
     template_name = 'prenotazioni_evento.html'
     context_object_name = 'prenotazioni'
@@ -194,3 +202,7 @@ class EventPrenotazioniListView(ListView):
         context = super().get_context_data(**kwargs)
         context['evento'] = self.evento
         return context
+
+    def test_func(self):
+        # Controlla se l'utente appartiene al gruppo 'redattori'
+        return self.request.user.groups.filter(name='redattori').exists()

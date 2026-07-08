@@ -91,7 +91,7 @@ class TipologiaCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     success_url = reverse_lazy('gestione_tipologia_creazione')
 
     def test_func(self):
-        # Controlla se l'utente appartiene al gruppo 'editor'
+        # Controlla se l'utente appartiene al gruppo 'redattori'
         return self.request.user.groups.filter(name='redattori').exists()
 
     # Faccio l'override del metodo form_valid per aggiungere in automatico l'utente creatore
