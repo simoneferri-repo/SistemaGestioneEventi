@@ -28,5 +28,11 @@ urlpatterns = [
     path("", include("eventi_prenotazione.urls")),
 ]
 
-if settings.DEBUG:
+if not settings.DEBUG:
+    urlpatterns += [
+        path(f"{settings.MEDIA_URL.lstrip('/')}<path:path>", serve, {'document_root': settings.MEDIA_ROOT}),
+    ]
+else:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#if settings.DEBUG:
+#    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
