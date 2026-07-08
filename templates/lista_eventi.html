@@ -24,31 +24,35 @@
         {% endfor %}
     </div>
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for evento in eventi_futuri %}
-            <div class="col">
-                <div class="card h-100">
-                        {% if evento.immagine_evento %}
-                            <img src="{{ evento.immagine_evento.url }}" class="card-img-top" alt="">
-                        {% endif %}
-                        <div class="card-body">
-                            <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' evento.id %}">{{ evento.nome_evento }}</a></h3>
-                            <p class="card-text">
-                                {% for tipologia in evento.tipo_evento.all %}
-                                    <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
-                                {% endfor %}
-                                <br>
-                                {{ evento.data_ora_evento|date:"d F Y \o\r\e H:i" }}<br>
-                                {% if evento.annullato %}
-                                    <p class="badge bg-danger fs-5">Evento annullato!</p>
-                                {% endif %}
-                                {% if evento.id in eventi_prenotati_ids %}
-                                    <p class="badge bg-light text-dark fs-5">Evento prenotato</p>
-                                {% endif %}
-                            </p>
-                        </div>
+        {% if eventi_futuri %}
+            {% for evento in eventi_futuri %}
+                <div class="col">
+                    <div class="card h-100">
+                            {% if evento.immagine_evento %}
+                                <img src="{{ evento.immagine_evento.url }}" class="card-img-top" alt="">
+                            {% endif %}
+                            <div class="card-body">
+                                <h3 class="card-title h4"><a class="text-primary-emphasis" href="{% url 'evento' evento.id %}">{{ evento.nome_evento }}</a></h3>
+                                <p class="card-text">
+                                    {% for tipologia in evento.tipo_evento.all %}
+                                        <span class="badge rounded-pill text-bg-dark">{{ tipologia.nome_tipo }}</span>
+                                    {% endfor %}
+                                    <br>
+                                    {{ evento.data_ora_evento|date:"d F Y \o\r\e H:i" }}<br>
+                                    {% if evento.annullato %}
+                                        <p class="badge bg-danger fs-6">Evento annullato!</p>
+                                    {% endif %}
+                                    {% if evento.id in eventi_prenotati_ids %}
+                                        <p class="badge bg-light text-dark fs-5">Evento prenotato</p>
+                                    {% endif %}
+                                </p>
+                            </div>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <p class="alert alert-info">Non ci sono eventi in programma per questa tipologia.</p>
+        {% endif %}
     </div>
     {% if page_obj.has_other_pages %}
         <nav aria-label="Navigazione pagine" class="mt-4">
