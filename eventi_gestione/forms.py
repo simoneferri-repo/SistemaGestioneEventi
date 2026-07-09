@@ -20,6 +20,9 @@ class GestioneEventiForm(ModelForm):
     class Meta:
         model = Eventi
         fields = ['nome_evento', 'descrizione_evento', 'tipo_evento', 'luogo_evento', 'data_ora_evento', 'immagine_evento', 'prezzo', 'posti_prenotabili', 'annullato', 'pubblicato']
+        labels = {
+            'immagine_evento': 'Immagine evento (dimensioni 500px x 350px)',
+        }
 
 # Verifico che venga selezionato almeno una tipologia per l'evento
     def clean_tipo_evento(self):

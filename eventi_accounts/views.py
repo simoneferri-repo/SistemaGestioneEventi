@@ -8,7 +8,7 @@ from django.contrib import messages
 
 from .models import CustomUser
 
-
+# Vista che gestisce l'iscrizione dell'utente
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
@@ -19,10 +19,12 @@ class SignUpView(CreateView):
         nuovo_utente = self.object
         gruppo_visitatori, created = Group.objects.get_or_create(name='visitatori')
         nuovo_utente.groups.add(gruppo_visitatori)
+        messages.success(self.request, "Iscrizione effettuata con successo!!")
         return response
 
 User = get_user_model()
 
+# Vista che gestisce la modifica di un utente
 class EditUserView(LoginRequiredMixin, UpdateView):
     model = User
     template_name = 'edit_profilo.html'

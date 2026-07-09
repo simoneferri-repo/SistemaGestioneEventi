@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-
+# Vista che gestisce la home page
 class HomePageView(TemplateView):
     template_name = "home.html"
 
@@ -47,6 +47,7 @@ class HomePageView(TemplateView):
 
         return context
 
+# Vista che gestisce l'elenco degli eventi
 class EventListView(ListView):
     model = Eventi
     template_name = "lista_eventi.html"
@@ -88,6 +89,8 @@ class EventListView(ListView):
                 context['tipologia_corrente'] = None
 
         return context
+
+# Vista che gestisce l'elenco degli eventi prenotati dall'utente
 class UserEventListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Prenotazione
     template_name = "prenotazioni_utente.html"
@@ -126,6 +129,7 @@ class UserEventListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_queryset(self):
         return Prenotazione.objects.filter(utente=self.request.user, evento__data_ora_evento__gte=timezone.now()).select_related('evento').order_by('evento__data_ora_evento')
 
+# Vista che gestisce la pagina di dettaglio dell'evento
 class EventDetailView(DetailView):
     model = Eventi
     template_name = "scheda_evento.html"
@@ -175,6 +179,7 @@ class EventDetailView(DetailView):
 
         return context
 
+# Vista che gestisce l'elenco degli eventi inseriti dal redattore
 class EditorEventListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Eventi
     template_name = 'gestione_eventi_elenco.html'
@@ -195,6 +200,7 @@ class EditorEventListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         # Controlla se l'utente appartiene al gruppo 'redattori'
         return self.request.user.groups.filter(name='redattori').exists()
 
+# Vista che gestisce l'elenco delle prenotazioni di un evento
 class EventPrenotazioniListView(UserPassesTestMixin, ListView):
     model = Prenotazione
     template_name = 'prenotazioni_evento.html'

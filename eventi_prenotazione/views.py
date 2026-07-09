@@ -9,7 +9,7 @@ from eventi_gestione.models import Eventi
 from eventi_prenotazione.models import Prenotazione
 from django.shortcuts import render
 
-
+# Vista che gestisce la creazione di una prenotazione
 class PrenotazioneView(LoginRequiredMixin, View):
 
     def post(self, request, evento_id):
@@ -42,6 +42,7 @@ class PrenotazioneView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(reverse('eventi'))
 
+# Vista che gestisce la cancellazione di una prenotazione
 class CancellazionePrenotazioneView(LoginRequiredMixin, View):
 
     def post(self, request, prenotazione_id):

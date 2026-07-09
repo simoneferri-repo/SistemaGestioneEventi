@@ -46,7 +46,7 @@
 
     <p>
     {% if is_creatore %}
-        <p>Posti disponibili: <span class="badge bg-success">{{ evento.posti_prenotabili}}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento.prenotazione_set.count }}</span> {% if evento.prenotazione_set.count > 0 and is_creatore %} (<a href="/eventi/{{ evento.id }}/prenotazioni/">Dettaglio prenotazioni</a>) {% endif %}</p>
+        <p>Posti disponibili: <span class="badge bg-success">{{ evento.posti_prenotabili|default:0 }}</span> - Posti prenotati: <span class="badge bg-warning text-dark">{{ evento.prenotazione_set.count }}</span> {% if evento.prenotazione_set.count > 0 and is_creatore %} (<a href="/eventi/{{ evento.id }}/prenotazioni/">Dettaglio prenotazioni</a>) {% endif %}</p>
         <div class="alert alert-primary d-inline-block">
             <i class="bi bi-pencil-square"></i> <a href="{% url 'gestione_eventi_modifica' evento.id %}" class="alert-link">Modifica l'evento</a>
         </div>
@@ -90,7 +90,11 @@
                 </div>
             {% endif %}
         {% elif not evento.annullato and evento.data_ora_evento|date:"Y-m-d H:i:s" > ora_attuale %}
-            <p class="alert alert-warning d-inline-block"><i class="bi bi-calendar-x"></i> Disponibilità esaurita, sono stati prenotati tutti i {{ evento.prenotazione_set.count }} disponibili</p>
+            {% if evento.posti_prenotabili is not None %}
+                <p class="alert alert-warning d-inline-block"><i class="bi bi-calendar-x"></i> Disponibilità esaurita, sono stati prenotati tutti i {{ evento.prenotazione_set.count }} disponibili</p>
+            {% else %}
+                <p class="alert alert-success d-inline-block"><i class="bi bi-info-circle"></i> Non è necessaria la prenotazione</p>
+            {% endif %}
         {% endif %}
     {% endif %}
     </p>
