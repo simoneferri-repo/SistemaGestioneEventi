@@ -336,7 +336,21 @@ Di seguito sono descritti brevemente alcuni scenari utili a testare le principal
 * **Risultati**
   1. torno sulla scheda dell’evento con un messaggio in alto “Impossibile spubblicare 'Amleto, tutto quello che non so': ci sono 2 prenotazioni attive. È possibile solo annullare l'evento”
 
-### 9. Annullamento evento
+### 9. Spubblicazione evento senza prenotazioni
+* **Azioni**
+  1. accedo con l’utente editor1
+  2. vago su “Tutti gli eventi”
+  3. clicco su evento “Amleto, tutto quello che non so”
+  4. clicco su “Modifica evento”
+  5. deseleziono l’opzione “Pubblicato”
+  6. clicco su “Salva”
+* **Risultati**
+  1. vengo riportato sulla scheda dell’evento con un messaggio in alto “Evento modificato con successo!”
+  2. l'evento sparisce dagli elenchi visibili agli utenti
+  3. l'evento rimane negli elenchi della sezione "Gestione eventi" con un avviso "Evento non pubblicato"
+  4. richiamando direttamente la scheda di un evento non pubblicato appare un messaggio "Evento non pubblicato" e viene mandato un codice http 404
+
+### 10. Annullamento evento
 * **Azioni**
   1. accedo con l’utente editor1
   2. apro il menu utente cliccando sul bottone con il nome utente
@@ -351,7 +365,7 @@ Di seguito sono descritti brevemente alcuni scenari utili a testare le principal
   3. Negli elenchi, nella card dell’evento appare la scritta messaggio annullato
   4. Nella home e nella pagina delle prenotazioni dell’utente1 appare un messaggio che avvisa che l’evento è stato spubblicato
 
-### 10. Consultazione prenotazioni su evento
+### 11. Consultazione prenotazioni su evento
 * **Azioni**
   1. accedo con l’utente editor1
   2. apro il menu utente cliccando sul bottone con il nome utente
@@ -360,8 +374,8 @@ Di seguito sono descritti brevemente alcuni scenari utili a testare le principal
 * **Risultati**
   1. arrivo sulla pagina con l’elenco di tutte le prenotazioni attive su quell’evento con la possibilità di cancellarle
 
-### 11. Aggiunta tipologia e modifica tipologia
+### 12. Aggiunta tipologia e modifica tipologia
 * Le azioni e i risultati sono simili a quelli per gli eventi. L’unica differenza è che le tipologie già inserite si vedono direttamente nella maschera di inserimento ed è possibile solo modificare (non cancellare) le tipologie inserite da noi
 
-### 12. Evento scaduto
+### 13. Evento scaduto
 * Chiamando l'indirizzo https://gestione-eventi.up.railway.app/eventi/4/ si arriva sulla scheda di un  evento scaduto in cui viene visualizzato un messaggio di avviso, sono disabilitate le prenotazioni e viene reso un codice http 404 per impedire l'indicizzazione dei motori 
