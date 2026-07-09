@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput && gunicorn sistemagestioneeventi.wsgi --log-file -
+web: python manage.py loaddata dati_demo.json && python manage.py collectstatic --noinput && gunicorn sistemagestioneeventi.wsgi --log-file -
