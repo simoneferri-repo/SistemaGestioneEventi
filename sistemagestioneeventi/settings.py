@@ -98,10 +98,13 @@ DATABASES = {
 }
 
 if os.environ.get('DATABASE_URL'):
-    DATABASES['default'] = dj_database_url.config(
-        conn_max_age=600,
-        ssl_require=True
+    db_from_env = dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600
     )
+    # Rimuoviamo il vincolo SSL per la rete interna di Railway
+    db_from_env['OPTIONS'] = {'sslmode': 'disable'}
+    DATABASES['default'] = db_from_env
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
