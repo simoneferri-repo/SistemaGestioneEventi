@@ -29,6 +29,9 @@
                                     {% endfor %}
                                     <br>
                                     {{ prenotato.evento.data_ora_evento }}<br>
+                                    {% if prenotato.evento.annullato %}
+                                        <p class="badge bg-danger fs-6">Evento annullato!</p>
+                                    {% endif %}
                                 </p>
                             </div>
                     </div>
