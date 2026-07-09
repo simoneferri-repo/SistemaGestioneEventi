@@ -63,7 +63,7 @@ Un redattore può inserire o modificare una tipologia. Le operazioni di modifica
 
 Un redattore può consultare una sezione (Gestione eventi) in cui sono presenti tutti gli eventi che ha inserito, sia quelli futuri che quelli già passati, distinti in due elenchi diversi.
 
-Da una qualunque pagina in cui è presente un elenco di eventi, cliccando sul nome dell’evento si arriva nella pagina di dettaglio dalla quale è possibile modificare o eliminare un evento. Dalla stessa pagina può anche prenotare un evento che lui stesso ha inserito ma deve prima autenticarsi con un profilo di fruitore.
+Da una qualunque pagina in cui è presente un elenco di eventi, cliccando sul nome dell’evento si arriva nella pagina di dettaglio dalla quale è possibile modificare o eliminare un evento se l'evento è stato inserito del redattore stesso. Un redattore può anche prenotare un evento ma deve prima autenticarsi con un profilo di fruitore.
 
 Se nell’evento sono presenti prenotazioni è possibile cliccare su un link (“dettaglio prenotazioni”) che porta ad una pagina con l’elenco di tutte le prenotazioni presenti per quell’evento. Il redattore può cancellare una prenotazione ma solo in casi eccezionali (apertura di una finestra di avviso).
 
@@ -71,7 +71,7 @@ I redattori possono modificare i loro dati dalla sezione “Modifica utente” e
 
 ### Funzionalità del fruitore
 
-Gli utenti si iscrivono al sistema utilizzando la maschera di SignUp e viene loro assegnato in automatico il gruppo “visualizzatori” che gli assegna i permessi necessari per poter prenotare gli eventi e gestire le proprie prenotazioni.
+Gli utenti si iscrivono al sistema utilizzando la maschera di SignUp e viene loro assegnato in automatico il gruppo “visitatori” che gli assegna i permessi necessari per poter prenotare gli eventi e gestire le proprie prenotazioni.
 
 I fruitori possono consultare gli eventi pubblicati e fare una prenotazione per uno o più eventi. Ogni fruitore può fare solo una prenotazione.
 
@@ -146,6 +146,7 @@ Ci sono tutta una serie di precondizioni e di requisiti che sono stati scelti ne
 * un evento può avere più di una tipologia. È stato deciso di non mettere un limite fisso ma in un caso reale ai redattori sarebbe suggerito di non usarne più di tre
 * un redattore non può eliminare una tipologia ma solo modificare il nome
 * se terminano i posti prenotabili sparisce il bottone di prenotazione dall’evento
+* un evento può essere inserito con 0 posti prenotabili, in quel caso un messaggio avvisa che non è richiesta la prenotazione
 * se sono presenti prenotazioni su un evento il redattore non può eliminarlo o spubblicarlo
 * un evento annullato non può essere prenotato
 * gli eventi passati spariscono dall’elenco degli eventi, restano solo nell’elenco degli eventi inseriti da un redattore. Sono anche visibili se richiamati direttamente con la url ma mostrano un messaggio di avviso sul fatto che l’evento è passato
@@ -154,7 +155,7 @@ Ci sono tutta una serie di precondizioni e di requisiti che sono stati scelti ne
 * solo l’admin può inserire un utente nel gruppo dei redattori
 * tutti gli utenti che si iscrivono di default sono assegnati al gruppo “visitatori”
 
-> **Nota** > Manca tutta la gestione dei contatti e delle notifiche che avrebbe richiesto l’implementazione di un servizio di gestione delle mail.
+
 
 ---
 
@@ -216,7 +217,7 @@ Per l’installazione in locale dell’applicativo si possono seguire i seguenti
 
 ### Database
 
-In sviluppo viene utilizzato il database predefinito di Django con il suo nome standard “db.sqlite3”, lo stesso file è presente nella repository Github insieme ad un dump Json dei dati che si chiama “dati_demo.json”. Per il deploy su Railway è stato utilizzato il database Postreges.
+In sviluppo viene utilizzato il database predefinito di Django con il suo nome standard “db.sqlite3”, lo stesso file è presente nella repository Github insieme ad un dump Json dei dati che si chiama “dati_demo.json”. Per il deploy su Railway è stato utilizzato il database PostgreSQL.
 
 Il file “db.sqlite3” e il file “dati_demo.json” presenti sulla repository Github contengono i seguento dati di demo:
 * 7 account (1 superadmin, 3 redattori, 3 fruitori)
@@ -224,7 +225,7 @@ Il file “db.sqlite3” e il file “dati_demo.json” presenti sulla repositor
 * 11 tipologie di evento
 * 11 prenotazioni
 
-Con gli stessi dati è stato popolato il db Postgres su Railway ma sono stati modificati durante prove successive.
+Con gli stessi dati è stato popolato il db PostgreSQL su Railway ma sono stati modificati durante prove successive.
 
 ### Demo account
 
