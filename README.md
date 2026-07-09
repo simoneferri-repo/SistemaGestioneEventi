@@ -179,7 +179,7 @@ Css e immagini utilizzati per il layout sono sotto la cartella **static**.
 
 In questa sezione sono fornite le specifiche utili per la fase di test del funzionamento dell’applicativo realizzato.
 
-### **Istruzioni per l'installazione in locale** {#istruzioni-per-installazione-in-locale}
+### Istruzioni per installazione in locale
 
 Per l’installazione in locale dell’applicativo si possono seguire i seguenti passi:
 
