@@ -362,3 +362,6 @@ Di seguito sono descritti brevemente alcuni scenari utili a testare le principal
 
 ### 11. Aggiunta tipologia e modifica tipologia
 * Le azioni e i risultati sono simili a quelli per gli eventi. L’unica differenza è che le tipologie già inserite si vedono direttamente nella maschera di inserimento ed è possibile solo modificare (non cancellare) le tipologie inserite da noi
+
+### 12. Evento scaduto
+* Chiamando l'indirizzo https://gestione-eventi.up.railway.app/eventi/4/ si arriva sulla scheda di un  evento scaduto in cui viene visualizzato un messaggio di avviso, sono disabilitate le prenotazioni e viene reso un codice http 404 per impedire l'indicizzazione dei motori 
