@@ -14,7 +14,11 @@
     <h2 class="mt-5 mb-4">Gestione tipologie</h2>
     <div class="row">
         <div class="col-md-9 mb-4 mb-md-0 pb-4 border-bottom">
-            <h3 class="h4">Aggiungi nuova tipologia</h3>
+            {% if request.resolver_match.url_name == 'gestione_tipologia_creazione' %}
+                <h3 class="h4">Aggiungi nuova tipologia</h3>
+            {% elif request.resolver_match.url_name == 'gestione_tipologia_modifica' %}
+                <h3 class="h4">Modifica tipologia</h3>
+            {% endif %}
             {% crispy form %}
         </div>
         {% if request.resolver_match.url_name == 'gestione_tipologia_creazione' %}
