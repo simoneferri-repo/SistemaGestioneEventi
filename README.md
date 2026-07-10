@@ -310,7 +310,7 @@ Di seguito sono descritti brevemente alcuni scenari utili a testare le principal
   1. accedo con l’utente editor1
   2. vago su “Tutti gli eventi”
   3. clicco su “Pagina 2”
-  4. clicco su evento “Fabrizio Fontana”
+  4. clicco su evento “Ensemble Nino Rota”
   5. clicco su “Elimina evento”
   6. clicco su “Si elimina”
 * **Risultati**
@@ -340,7 +340,7 @@ Di seguito sono descritti brevemente alcuni scenari utili a testare le principal
 * **Azioni**
   1. accedo con l’utente editor1
   2. vago su “Tutti gli eventi”
-  3. clicco su evento “Amleto, tutto quello che non so”
+  3. clicco su evento “Stefano Tamborrino”
   4. clicco su “Modifica evento”
   5. deseleziono l’opzione “Pubblicato”
   6. clicco su “Salva”
